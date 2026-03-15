@@ -1,0 +1,143 @@
+---
+import ImagePlaceholder from './ImagePlaceholder.astro';
+
+interface Props {
+  title: string;
+  title_en: string;
+  description: string;
+  description_en: string;
+  slug: string;
+  slug_en: string;
+  coverImage?: string;
+  index: number;
+  lang: 'es' | 'en';
+}
+
+const { title, title_en, description, description_en, slug, slug_en, coverImage, index, lang } = Astro.props;
+
+const isReversed = index % 2 === 1;
+const servicePath = `/${lang}/${lang === 'es' ? 'servicios' : 'services'}/${lang === 'es' ? slug : slug_en}`;
+---
+
+<article class={`service-card ${isReversed ? 'service-card--reversed' : ''}`}>
+  <div class="service-card__image">
+    {coverImage ? (
+      <img src={coverImage} alt={lang === 'es' ? title : title_en} />
+    ) : (
+      <ImagePlaceholder aspectRatio="4/3" alt={lang === 'es' ? title : title_en} />
+    )}
+  </div>
+
+  <div class="service-card__content">
+    <h3 class="service-card__title">
+      {lang === 'es' ? title : title_en}
+    </h3>
+
+    <p class="service-card__description">
+      {lang === 'es' ? description : description_en}
+    </p>
+
+    <a href={servicePath} class="service-card__link">
+      {lang === 'es' ? 'Ver más' : 'View more'}
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+</article>
+
+<style>
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(201, 169, 110, 0.2);
+  }
+
+  .service-card:last-child {
+    border-bottom: none;
+  }
+
+  .service-card__image {
+    width: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .service-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .service-card__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-2xl);
+    font-weight: 400;
+    color: var(--color-text-dark);
+    margin: 0;
+  }
+
+  .service-card__description {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--color-gray-soft);
+    margin: 0;
+  }
+
+  .service-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    color: var(--color-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: gap var(--transition-fast);
+    margin-top: 0.5rem;
+  }
+
+  .service-card__link:hover {
+    gap: 0.75rem;
+  }
+
+  .service-card__link svg {
+    transition: transform var(--transition-fast);
+  }
+
+  .service-card__link:hover svg {
+    transform: translateX(4px);
+  }
+
+  @media (min-width: 768px) {
+    .service-card {
+      flex-direction: row;
+      align-items: center;
+      gap: 3rem;
+      padding: 3rem 0;
+    }
+
+    .service-card--reversed {
+      flex-direction: row-reverse;
+    }
+
+    .service-card__image {
+      flex: 1;
+      max-width: 50%;
+    }
+
+    .service-card__content {
+      flex: 1;
+      max-width: 50%;
+    }
+
+    .service-card__title {
+      font-size: var(--text-3xl);
+    }
+  }
+</style>

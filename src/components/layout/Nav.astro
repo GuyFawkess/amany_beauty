@@ -1,0 +1,334 @@
+---
+import { useTranslations } from '../../i18n';
+import { getCollection } from 'astro:content';
+
+interface Props {
+  currentLang?: 'es' | 'en';
+  currentServiceSlug?: string;
+}
+
+const { currentLang, currentServiceSlug } = Astro.props;
+const lang = (Astro.params?.lang as 'es' | 'en') || currentLang || 'es';
+const t = useTranslations(lang);
+
+// Get all services for dropdown
+const services = await getCollection('services');
+
+// Current path for active states
+const currentPath = Astro.url.pathname;
+
+// Build language toggle URL
+const otherLang = lang === 'es' ? 'en' : 'es';
+const servicesSegment = lang === 'es' ? 'servicios' : 'services';
+const otherServicesSegment = otherLang === 'es' ? 'servicios' : 'services';
+
+// If we're on a service page, use the provided slug for the other language
+let langTogglePath: string;
+if (currentServiceSlug) {
+  // We're on a service page - use the provided slug
+  langTogglePath = `/${otherLang}/${otherServicesSegment}/${currentServiceSlug}`;
+} else {
+  // Not on a service page - use path replacement
+  langTogglePath = currentPath.replace(`/${lang}/`, `/${otherLang}/`).replace(`/${servicesSegment}/`, `/${otherServicesSegment}/`);
+}
+---
+
+<nav class="nav" aria-label={t.a11y.mainNav}>
+  <div class="nav__container">
+    <!-- Logo -->
+    <a href={`/${lang}/`} class="nav__logo">
+      <img src="/logo.png" alt="Amani Beauty" width="140" height="40" />
+    </a>
+
+    <!-- Navigation Links -->
+    <div class="nav__links">
+      <!-- Services Dropdown -->
+      <div class="nav__dropdown">
+        <a
+          href={`/${lang}/#services`}
+          class="nav__link nav__dropdown-toggle"
+        >
+          {t.nav.services}
+          <svg class="nav__dropdown-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <ul class="nav__dropdown-menu" role="menu">
+          {services.sort((a, b) => a.data.sortOrder - b.data.sortOrder).map((service) => (
+            <li role="none">
+              <a
+                href={`/${lang}/${lang === 'es' ? 'servicios' : 'services'}/${lang === 'es' ? service.data.slug_es : service.data.slug_en}`}
+                class="nav__dropdown-link"
+                role="menuitem"
+              >
+                {lang === 'es' ? service.data.title : service.data.title_en}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Anchor Links (Home sections) -->
+      <a href={`/${lang}/#about`} class="nav__link">{t.nav.about}</a>
+      <a href={`/${lang}/#gallery`} class="nav__link">{t.nav.gallery}</a>
+      <a href={`/${lang}/#contact`} class="nav__link">{t.nav.contact}</a>
+
+      <!-- Language Toggle -->
+      <a href={langTogglePath} class="nav__lang-toggle" aria-label={t.a11y.languageToggle}>
+        {lang === 'es' ? 'EN' : 'ES'}
+      </a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="nav__mobile-toggle" aria-label={t.a11y.openMenu} aria-expanded="false">
+      <span class="nav__mobile-toggle-line"></span>
+      <span class="nav__mobile-toggle-line"></span>
+      <span class="nav__mobile-toggle-line"></span>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="nav__mobile-menu">
+    <div class="nav__mobile-menu-content">
+      <a href={`/${lang}/#services`} class="nav__mobile-link">{t.nav.services}</a>
+      {services.sort((a, b) => a.data.sortOrder - b.data.sortOrder).map((service) => (
+        <a
+          href={`/${lang}/${lang === 'es' ? 'servicios' : 'services'}/${lang === 'es' ? service.data.slug_es : service.data.slug_en}`}
+          class="nav__mobile-link nav__mobile-link--sub"
+        >
+          {lang === 'es' ? service.data.title : service.data.title_en}
+        </a>
+      ))}
+      <a href={`/${lang}/#about`} class="nav__mobile-link">{t.nav.about}</a>
+      <a href={`/${lang}/#gallery`} class="nav__mobile-link">{t.nav.gallery}</a>
+      <a href={`/${lang}/#contact`} class="nav__mobile-link">{t.nav.contact}</a>
+      <a href={langTogglePath} class="nav__mobile-link nav__mobile-link--lang">
+        {lang === 'es' ? 'English' : 'Español'}
+      </a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--color-white-warm);
+    border-bottom: 1px solid rgba(201, 169, 110, 0.2);
+  }
+
+  .nav__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 1rem;
+    height: var(--nav-height);
+  }
+
+  .nav__logo img {
+    height: 40px;
+    width: auto;
+  }
+
+  .nav__links {
+    display: none;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .nav__link,
+  .nav__dropdown-toggle {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    color: var(--color-text-dark);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .nav__link:hover,
+  .nav__dropdown-toggle:hover {
+    color: var(--color-gold);
+  }
+
+  .nav__dropdown-icon {
+    transition: transform var(--transition-fast);
+  }
+
+  /* Dropdown */
+  .nav__dropdown {
+    position: relative;
+  }
+
+  .nav__dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background-color: var(--color-white-warm);
+    border: 1px solid rgba(201, 169, 110, 0.2);
+    border-radius: 4px;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+    padding: 0.5rem 0;
+  }
+
+  .nav__dropdown:hover .nav__dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .nav__dropdown-link {
+    display: block;
+    padding: 0.75rem 1.25rem;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    color: var(--color-text-dark);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .nav__dropdown-link:hover {
+    background-color: var(--color-cream);
+    color: var(--color-gold);
+  }
+
+  /* Language Toggle */
+  .nav__lang-toggle {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-gold);
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-gold);
+    border-radius: 4px;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .nav__lang-toggle:hover {
+    background-color: var(--color-gold);
+    color: var(--color-white-warm);
+  }
+
+  /* Mobile Toggle */
+  .nav__mobile-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .nav__mobile-toggle-line {
+    width: 24px;
+    height: 2px;
+    background-color: var(--color-text-dark);
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
+  }
+
+  .nav__mobile-toggle[aria-expanded="true"] .nav__mobile-toggle-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .nav__mobile-toggle[aria-expanded="true"] .nav__mobile-toggle-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav__mobile-toggle[aria-expanded="true"] .nav__mobile-toggle-line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  /* Mobile Menu */
+  .nav__mobile-menu {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-white-warm);
+    transform: translateX(100%);
+    transition: transform var(--transition-base);
+    overflow-y: auto;
+  }
+
+  .nav__mobile-menu[aria-hidden="false"] {
+    transform: translateX(0);
+  }
+
+  .nav__mobile-menu-content {
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav__mobile-link {
+    font-family: var(--font-sans);
+    font-size: var(--text-lg);
+    color: var(--color-text-dark);
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+  }
+
+  .nav__mobile-link--sub {
+    font-size: var(--text-base);
+    padding-left: 1.5rem;
+    color: var(--color-gray-soft);
+  }
+
+  .nav__mobile-link--lang {
+    margin-top: 1rem;
+    font-weight: 500;
+    color: var(--color-gold);
+    text-align: center;
+    border: 1px solid var(--color-gold);
+    border-radius: 4px;
+    padding: 1rem;
+  }
+
+  /* Desktop */
+  @media (min-width: 1024px) {
+    .nav__links {
+      display: flex;
+    }
+
+    .nav__mobile-toggle,
+    .nav__mobile-menu {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Mobile menu toggle
+  const mobileToggle = document.querySelector('.nav__mobile-toggle');
+  const mobileMenu = document.querySelector('.nav__mobile-menu');
+
+  mobileToggle?.addEventListener('click', () => {
+    const isExpanded = mobileToggle.getAttribute('aria-expanded') === 'true';
+    mobileToggle.setAttribute('aria-expanded', String(!isExpanded));
+    mobileMenu?.setAttribute('aria-hidden', String(isExpanded));
+  });
+
+  // Close mobile menu when clicking links
+  const mobileLinks = document.querySelectorAll('.nav__mobile-link');
+  mobileLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      mobileToggle?.setAttribute('aria-expanded', 'false');
+      mobileMenu?.setAttribute('aria-hidden', 'true');
+    });
+  });
+</script>

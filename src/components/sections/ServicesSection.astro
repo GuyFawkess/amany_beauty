@@ -1,0 +1,73 @@
+---
+import { useTranslations } from '../../i18n';
+import { getCollection } from 'astro:content';
+import ServiceCard from '../ui/ServiceCard.astro';
+
+const lang = (Astro.params?.lang as 'es' | 'en') || 'es';
+const t = useTranslations(lang);
+
+const services = await getCollection('services');
+const sortedServices = services.sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+---
+
+<section class="services-section" id="services">
+  <div class="services-section__container">
+    <h2 class="services-section__title">
+      {t.services.title}
+    </h2>
+
+    <div class="services-section__grid">
+      {sortedServices.map((service, index) => (
+        <ServiceCard
+          title={service.data.title}
+          title_en={service.data.title_en}
+          description={service.data.description}
+          description_en={service.data.description_en}
+          slug={service.data.slug_es}
+          slug_en={service.data.slug_en}
+          coverImage={service.data.coverImage}
+          index={index}
+          lang={lang}
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .services-section {
+    padding: var(--space-section-mobile) 1rem;
+    background-color: var(--color-white-warm);
+  }
+
+  .services-section__container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .services-section__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-3xl);
+    font-weight: 400;
+    color: var(--color-text-dark);
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .services-section__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .services-section {
+      padding: var(--space-section-desktop) 2rem;
+    }
+
+    .services-section__title {
+      font-size: var(--text-4xl);
+      margin-bottom: 4rem;
+    }
+  }
+</style>

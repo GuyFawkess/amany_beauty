@@ -1,0 +1,283 @@
+---
+import Layout from '../../../components/layout/Layout.astro';
+import ImagePlaceholder from '../../../components/ui/ImagePlaceholder.astro';
+import TreatmentCard from '../../../components/ui/TreatmentCard.astro';
+import WhatsAppButton from '../../../components/ui/WhatsAppButton.astro';
+import { getCollection, getEntry } from 'astro:content';
+import { useTranslations } from '../../../i18n';
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+
+  // Generate paths for Spanish routes (using 'servicios' and Spanish slug)
+  const esPaths = services.map((service) => ({
+    params: { lang: 'es', services: 'servicios', slug: service.data.slug_es },
+    props: { service, currentSlug: service.data.slug_es },
+  }));
+
+  // Generate paths for English routes (using 'services' and English slug)
+  const enPaths = services.map((service) => ({
+    params: { lang: 'en', services: 'services', slug: service.data.slug_en },
+    props: { service, currentSlug: service.data.slug_en },
+  }));
+
+  return [...esPaths, ...enPaths];
+}
+
+const { service } = Astro.props;
+const { lang } = Astro.params;
+const t = useTranslations(lang as 'es' | 'en');
+
+// Get the slug for the other language
+const otherLangSlug = lang === 'es' ? service.data.slug_en : service.data.slug_es;
+
+// Get site data
+const generalData = await getEntry('site', 'general');
+const { data: siteData } = generalData;
+
+// Get the title and other data in the correct language
+const title = lang === 'es' ? service.data.title : service.data.title_en;
+const description = lang === 'es' ? service.data.description : service.data.description_en;
+
+// Get the body content in the correct language
+const bodyContent = lang === 'es' ? service.data.body_es : service.data.body_en;
+---
+
+<Layout
+  title={title}
+  description={description}
+  currentLang={lang as 'es' | 'en'}
+  currentServiceSlug={otherLangSlug}
+>
+  <!-- Hero Section -->
+  <section class="service-hero">
+    <div class="service-hero__container">
+      <h1 class="service-hero__title">{title}</h1>
+      <div class="service-hero__image">
+        {service.data.coverImage ? (
+          <img src={service.data.coverImage} alt={title} />
+        ) : (
+          <ImagePlaceholder aspectRatio="16/9" alt={title} />
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Introduction -->
+  <section class="service-intro">
+    <div class="service-intro__container">
+      <div class="service-intro__content">
+        <p>{bodyContent}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Treatments Grid -->
+  <section class="treatments">
+    <div class="treatments__container">
+      <h2 class="treatments__title">
+        {lang === 'es' ? 'Tratamientos' : 'Treatments'}
+      </h2>
+
+      <div class="treatments__grid">
+        {service.data.treatments.map((treatment) => (
+          <TreatmentCard
+            name={treatment.name}
+            name_en={treatment.name_en}
+            description={treatment.description}
+            description_en={treatment.description_en}
+            duration={treatment.duration}
+            price={treatment.price}
+            image={treatment.image}
+            lang={lang as 'es' | 'en'}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="service-cta">
+    <div class="service-cta__container">
+      <p class="service-cta__text">
+        {lang === 'es'
+          ? '¿Lista para tu experiencia de bienestar?'
+          : 'Ready for your wellness experience?'}
+      </p>
+      <a
+        href={`https://wa.me/${siteData.whatsapp?.replace(/\s+/g, '')}`}
+        class="service-cta__button"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {t.servicePage.bookNow}
+      </a>
+    </div>
+  </section>
+
+  <WhatsAppButton />
+</Layout>
+
+<style>
+  /* Hero */
+  .service-hero {
+    padding: 4rem 1rem 0;
+    background-color: var(--color-white-warm);
+  }
+
+  .service-hero__container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .service-hero__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-4xl);
+    font-weight: 400;
+    color: var(--color-text-dark);
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .service-hero__image {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  /* Introduction */
+  .service-intro {
+    padding: var(--space-section-mobile) 1rem;
+    background-color: var(--color-white-warm);
+  }
+
+  .service-intro__container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .service-intro__content {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--color-text-dark);
+  }
+
+  .service-intro__content :global(p) {
+    margin-bottom: 1.5rem;
+  }
+
+  .service-intro__content :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Treatments */
+  .treatments {
+    padding: var(--space-section-mobile) 1rem;
+    background-color: var(--color-cream);
+  }
+
+  .treatments__container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .treatments__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-3xl);
+    font-weight: 400;
+    color: var(--color-text-dark);
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .treatments__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  /* CTA */
+  .service-cta {
+    padding: var(--space-section-mobile) 1rem;
+    background-color: var(--color-gold);
+    text-align: center;
+  }
+
+  .service-cta__container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .service-cta__text {
+    font-family: var(--font-serif);
+    font-size: var(--text-2xl);
+    font-weight: 400;
+    color: var(--color-white-warm);
+    margin-bottom: 2rem;
+  }
+
+  .service-cta__button {
+    display: inline-block;
+    padding: 1rem 3rem;
+    background-color: var(--color-white-warm);
+    color: var(--color-gold);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 4px;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    box-shadow: var(--shadow-md);
+  }
+
+  .service-cta__button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  @media (min-width: 768px) {
+    .service-hero {
+      padding: 6rem 2rem 0;
+    }
+
+    .service-hero__title {
+      font-size: var(--text-5xl);
+      margin-bottom: 4rem;
+    }
+
+    .service-intro {
+      padding: var(--space-section-desktop) 2rem;
+    }
+
+    .service-intro__content {
+      font-size: var(--text-lg);
+    }
+
+    .treatments {
+      padding: var(--space-section-desktop) 2rem;
+    }
+
+    .treatments__title {
+      font-size: var(--text-4xl);
+      margin-bottom: 4rem;
+    }
+
+    .treatments__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem;
+    }
+
+    .service-cta {
+      padding: var(--space-section-desktop) 2rem;
+    }
+
+    .service-cta__text {
+      font-size: var(--text-3xl);
+    }
+  }
+</style>

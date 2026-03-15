@@ -1,0 +1,100 @@
+---
+import { useTranslations } from '../../i18n';
+import { getEntry } from 'astro:content';
+import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
+
+const lang = (Astro.params?.lang as 'es' | 'en') || 'es';
+const t = useTranslations(lang);
+
+const generalData = await getEntry('site', 'general');
+const { data } = generalData;
+---
+
+<section class="about-section" id="about">
+  <div class="about-section__container">
+    <h2 class="about-section__title">
+      {t.about.title}
+    </h2>
+
+    <div class="about-section__content">
+      <div class="about-section__image">
+        <ImagePlaceholder aspectRatio="3/4" alt="María García" />
+      </div>
+
+      <div class="about-section__text">
+        <p>{lang === 'es' ? data.about : data.about_en}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-section {
+    padding: var(--space-section-mobile) 1rem;
+    background-color: var(--color-cream);
+  }
+
+  .about-section__container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .about-section__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-3xl);
+    font-weight: 400;
+    color: var(--color-text-dark);
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .about-section__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .about-section__image {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .about-section__text {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--color-text-dark);
+  }
+
+  .about-section__text p {
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    .about-section {
+      padding: var(--space-section-desktop) 2rem;
+    }
+
+    .about-section__title {
+      font-size: var(--text-4xl);
+      margin-bottom: 4rem;
+    }
+
+    .about-section__content {
+      flex-direction: row;
+      gap: 4rem;
+      align-items: flex-start;
+    }
+
+    .about-section__image {
+      flex: 0 0 300px;
+    }
+
+    .about-section__text {
+      flex: 1;
+      font-size: var(--text-lg);
+    }
+  }
+</style>
