@@ -1,6 +1,5 @@
 ---
 import { getEntry } from 'astro:content';
-import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
 
 const lang = (Astro.params?.lang as 'es' | 'en') || 'es';
 
@@ -9,92 +8,159 @@ const { data } = generalData;
 ---
 
 <section class="hero" id="hero">
-  <div class="hero__container">
-    <!-- Logo -->
-    <div class="hero__logo">
-      <img src="/logo.png" alt="Amani Beauty" class="hero__logo-img" />
-    </div>
+  <!-- Video Background -->
+  <video
+    class="hero__video"
+    autoplay
+    muted
+    loop
+    playsinline
+    poster="/hero-poster.jpg"
+  >
+    <source src="/hero-video.mp4" type="video/mp4" />
+  </video>
 
-    <!-- Tagline -->
+  <!-- Overlay -->
+  <div class="hero__overlay"></div>
+
+  <!-- Content -->
+  <div class="hero__container">
     <h1 class="hero__tagline">
       {lang === 'es' ? data.tagline : data.tagline_en}
     </h1>
 
-    <!-- Hero Image Placeholder -->
-    <div class="hero__image">
-      <ImagePlaceholder aspectRatio="16/9" alt="Hero image" />
+    <div class="hero__cta">
+      <a href={`/${lang}/#about`} class="hero__cta-button hero__cta-button--primary">
+        {lang === 'es' ? 'Conócenos' : 'About Us'}
+      </a>
+      <a href={`/${lang}/#contact`} class="hero__cta-button hero__cta-button--secondary">
+        {lang === 'es' ? 'Reservar' : 'Book Now'}
+      </a>
     </div>
   </div>
-
-  <!-- ANIMATION HOOK: parallax/scroll effect goes here -->
 </section>
 
 <style>
   .hero {
-    min-height: calc(100vh - var(--nav-height));
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4rem 1rem;
-    background-color: var(--color-white-warm);
+  }
+
+  .hero__video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  .hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.5)
+    );
+    z-index: 2;
   }
 
   .hero__container {
+    position: relative;
+    z-index: 3;
     max-width: var(--max-width);
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2rem;
-  }
-
-  .hero__logo {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-  }
-
-  .hero__logo-img {
-    max-width: 200px;
-    height: auto;
+    padding: 1rem;
   }
 
   .hero__tagline {
     font-family: var(--font-serif);
     font-size: var(--text-3xl);
     font-weight: 300;
-    color: var(--color-text-dark);
+    color: var(--color-white-warm);
     text-align: center;
-    max-width: 600px;
+    max-width: 700px;
     line-height: 1.3;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
   }
 
-  .hero__image {
+  .hero__cta {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     width: 100%;
-    max-width: 900px;
+    max-width: 320px;
+  }
+
+  .hero__cta-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all var(--transition-base);
+  }
+
+  .hero__cta-button--primary {
+    background-color: var(--color-gold);
+    color: var(--color-white-warm);
+    border: 2px solid var(--color-gold);
+  }
+
+  .hero__cta-button--primary:hover {
+    background-color: transparent;
+    color: var(--color-gold);
+  }
+
+  .hero__cta-button--secondary {
+    background-color: transparent;
+    color: var(--color-white-warm);
+    border: 2px solid var(--color-white-warm);
+  }
+
+  .hero__cta-button--secondary:hover {
+    background-color: var(--color-white-warm);
+    color: var(--color-text-dark);
   }
 
   @media (min-width: 768px) {
-    .hero {
-      padding: 6rem 2rem;
-    }
-
     .hero__tagline {
       font-size: var(--text-4xl);
     }
 
-    .hero__logo-img {
-      max-width: 240px;
+    .hero__cta {
+      flex-direction: row;
+      max-width: 400px;
+    }
+
+    .hero__cta-button {
+      flex: 1;
     }
   }
 
   @media (min-width: 1024px) {
     .hero__tagline {
       font-size: var(--text-5xl);
-    }
-
-    .hero__logo-img {
-      max-width: 280px;
     }
   }
 </style>
