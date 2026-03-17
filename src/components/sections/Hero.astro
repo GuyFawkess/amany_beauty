@@ -9,8 +9,13 @@ const { data } = generalData;
 
 <section class="scroll-video-hero" id="scroll-hero">
   <div class="scroll-video-sticky">
+    <!-- Sprite sheet para desktop -->
+    <div id="heroSprite" class="hero-sprite"></div>
+
+    <!-- Video para móvil -->
     <video
       id="heroVideo"
+      class="hero-video-mobile"
       playsinline
       muted
       preload="auto"
@@ -51,7 +56,8 @@ const { data } = generalData;
     overflow: hidden;
   }
 
-  .scroll-video-sticky video {
+  .scroll-video-sticky video,
+  .hero-sprite {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -69,6 +75,37 @@ const { data } = generalData;
     transform-style: preserve-3d;
     /* Forzar aceleración por hardware */
     transform: translate3d(-50%, -50%, 0) scale(1.2);
+  }
+
+  .hero-sprite {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0) scale(1.2);
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    will-change: background-position, background-size;
+    backface-visibility: hidden;
+  }
+
+  /* Ocultar/mostrar según dispositivo */
+  .hero-video-mobile {
+    display: none;
+  }
+
+  .hero-sprite {
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .hero-video-mobile {
+      display: block;
+    }
+
+    .hero-sprite {
+      display: none;
+    }
   }
 
   .hero-content {
@@ -182,7 +219,8 @@ const { data } = generalData;
     .hero-content {
       opacity: 0;
     }
-    .scroll-video-sticky video {
+    .scroll-video-sticky video,
+    .hero-sprite {
       transform: translate(-50%, -50%) scale(1);
     }
   }
@@ -199,21 +237,20 @@ const { data } = generalData;
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const video = document.getElementById('heroVideo') as HTMLVideoElement | null;
+  document.addEventListener('DOMContentLoaded', async () => {
     const hero = document.getElementById('scroll-hero') as HTMLElement | null;
     const heroContent = document.getElementById('heroContent') as HTMLElement | null;
+    const spriteEl = document.getElementById('heroSprite') as HTMLElement | null;
+    const videoEl = document.getElementById('heroVideo') as HTMLVideoElement | null;
 
-    if (!video || !hero) {
+    if (!hero || !spriteEl || !videoEl) {
       console.error('No se encontraron los elementos del hero');
       return;
     }
 
-    // TypeScript now knows video and hero are not null after this point
-    const videoEl = video;
     const heroEl = hero;
 
-    console.log('Video y hero encontrados');
+    console.log('Hero elementos encontrados');
 
     // Detectar móvil
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
@@ -221,14 +258,15 @@ const { data } = generalData;
 
     console.log('Es móvil:', isMobile, 'Movimiento reducido:', prefersReduced);
 
+    // ============================================
+    // MÓVIL: Video con autoplay
+    // ============================================
     if (isMobile || prefersReduced) {
-      // En móvil: autoplay una sola vez y parar en el último frame
       videoEl.autoplay = true;
       videoEl.loop = false;
       videoEl.muted = true;
       videoEl.playsInline = true;
 
-      // Función para intentar reproducir con múltiples intentos
       const attemptPlay = (attempt = 0) => {
         videoEl.play()
           .then(() => {
@@ -237,7 +275,6 @@ const { data } = generalData;
           .catch(err => {
             console.error(`Error autoplay intento ${attempt}:`, err);
             if (attempt < 3) {
-              // Reintentar con diferentes estrategias
               setTimeout(() => {
                 videoEl.load();
                 setTimeout(() => attemptPlay(attempt + 1), 300);
@@ -246,12 +283,10 @@ const { data } = generalData;
           });
       };
 
-      // Esperar a que el video tenga datos suficientes
       const tryPlayWhenReady = () => {
-        if (videoEl.readyState >= 2) { // HAVE_CURRENT_DATA
+        if (videoEl.readyState >= 2) {
           attemptPlay();
         } else {
-          // Escuchar múltiples eventos para compatibilidad con iOS
           const events = ['loadeddata', 'canplay', 'canplaythrough'];
           const handler = () => {
             events.forEach(ev => videoEl.removeEventListener(ev, handler));
@@ -259,7 +294,6 @@ const { data } = generalData;
           };
           events.forEach(ev => videoEl.addEventListener(ev, handler, { once: true }));
 
-          // Fallback: intentar después de un tiempo
           setTimeout(() => {
             if (videoEl.readyState >= 2) {
               attemptPlay();
@@ -268,28 +302,23 @@ const { data } = generalData;
         }
       };
 
-      // Iniciar carga del video
       videoEl.load();
       tryPlayWhenReady();
 
-      // Cuando el video termine, mostrar el contenido con transición suave
       videoEl.addEventListener('ended', () => {
         videoEl.currentTime = videoEl.duration;
         videoEl.pause();
 
-        // Mostrar el contenido con transición suave
         if (heroContent) {
           heroContent.style.opacity = '1';
           heroContent.classList.add('visible');
         }
       }, { once: true });
 
-      // Detectar interacción del usuario para retry si autoplay falló
       const retryOnInteraction = () => {
         if (videoEl.paused && videoEl.readyState >= 2) {
           videoEl.play().catch(e => console.warn('Play en interacción fallido:', e));
         }
-        // Remover listener después del primer intento
         document.removeEventListener('touchstart', retryOnInteraction);
         document.removeEventListener('click', retryOnInteraction);
       };
@@ -301,134 +330,108 @@ const { data } = generalData;
       return;
     }
 
-    // Desktop: scroll-driven - Optimizado para fluidez
-    videoEl.pause();
-    videoEl.currentTime = 0;
+    // ============================================
+    // DESKTOP: Sprite Sheet con scroll
+    // ============================================
 
-    // Detectar conexión lenta (con type safety)
-    let isSlowConnection = false;
-    if ('connection' in navigator) {
-      const conn = (navigator as any).connection;
-      if (conn && conn.effectiveType) {
-        isSlowConnection = conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g';
+    // Cargar manifest del sprite sheet
+    let spriteData: {
+      totalFrames: number;
+      frameWidth: number;
+      frameHeight: number;
+      framesPerRow: number;
+      sheets: Array<{
+        file: string;
+        startFrame: number;
+        endFrame: number;
+        frames: number;
+      }>;
+    } | null = null;
+
+    let currentSheetIndex = 0;
+    let framesLoaded = false;
+
+    try {
+      const response = await fetch('/sprites/manifest.json');
+      if (!response.ok) throw new Error('No se pudo cargar manifest.json');
+      spriteData = await response.json();
+
+      console.log('Sprite data cargado:', spriteData);
+
+      // Precargar todas las imágenes del sprite
+      const loadPromises = spriteData.sheets.map(async (sheet, index) => {
+        return new Promise<HTMLImageElement>((resolve, reject) => {
+          const img = new Image();
+          img.src = `/sprites/${sheet.file}`;
+          img.onload = () => {
+            console.log(`Sprite sheet ${index + 1}/${spriteData!.sheets.length} cargado`);
+            resolve(img);
+          };
+          img.onerror = () => reject(new Error(`Error cargando ${sheet.file}`));
+        });
+      });
+
+      await Promise.all(loadPromises);
+      framesLoaded = true;
+
+      // Configurar la primera imagen
+      if (spriteData.sheets.length > 0) {
+        spriteEl.style.backgroundImage = `url('/sprites/${spriteData.sheets[0].file}')`;
       }
+
+    } catch (error) {
+      console.error('Error cargando sprite sheets:', error);
+      console.log('Fallback: usar poster como imagen estática');
+      spriteEl.style.backgroundImage = `url('/video-poster.jpg')`;
+      spriteEl.style.backgroundSize = 'cover';
+      spriteEl.style.backgroundPosition = 'center';
+      return;
     }
 
-    // Reducir calidad en conexiones lentas o dispositivos móviles
-    if (isSlowConnection || isMobile) {
-      console.log('Conexión lenta detectada, optimizando video...');
-      videoEl.preload = "metadata"; // Solo cargar metadata para ahorrar datos
-    } else {
-      videoEl.preload = "auto";
+    if (!spriteData || !framesLoaded) {
+      console.error('No se pudieron cargar los sprites');
+      return;
     }
 
-    // Forzar formato más eficiente para scroll
-    videoEl.playsInline = true;
-    videoEl.disablePictureInPicture = true;
-    videoEl.disableRemotePlayback = true;
-
-    videoEl.load();
-
-    let isVideoReady = false;
-    let videoDuration = 0;
+    // Variables para scroll
+    let cachedHeroHeight = heroEl.offsetHeight;
+    let cachedWindowHeight = window.innerHeight;
     let lastUpdateTime = 0;
-    const minUpdateInterval = 33; // ~30fps (1000/30 ≈ 33ms) - Más suave para scroll
+    const minUpdateInterval = 16; // ~60fps
 
-    // Cachear dimensiones que no cambian frecuentemente
-    let cachedHeroHeight = 0;
-    let cachedWindowHeight = 0;
+    function getFramePosition(frameIndex: number) {
+      if (!spriteData) return { x: 0, y: 0, sheet: 0 };
 
-    // Suavizar transiciones con interpolación
-    let animationFrameId: number | null = null;
-
-    videoEl.addEventListener('loadedmetadata', () => {
-      isVideoReady = true;
-      videoDuration = videoEl.duration;
-      console.log('Video listo, duración:', videoDuration);
-
-      // Pre-cachear dimensiones iniciales
-      cachedHeroHeight = heroEl.offsetHeight;
-      cachedWindowHeight = window.innerHeight;
-    });
-
-    videoEl.addEventListener('error', (e) => {
-      console.error('Error cargando video:', e);
-      // Fallback: mostrar imagen estática si el video falla
-      const videoParent = videoEl.parentElement;
-      if (videoParent) {
-        const fallbackImg = document.createElement('div');
-        fallbackImg.style.cssText = `
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
-          z-index: 1;
-        `;
-        videoParent.appendChild(fallbackImg);
-      }
-    });
-
-    // Monitorear rendimiento del video
-    let frameDrops = 0;
-    let lastFrameTime = 0;
-
-    function monitorVideoPerformance() {
-      const now = performance.now();
-      if (lastFrameTime > 0) {
-        const frameInterval = now - lastFrameTime;
-        // Si el intervalo entre frames es > 20ms, consideramos que hay lag
-        if (frameInterval > 20) {
-          frameDrops++;
-          if (frameDrops > 10) {
-            console.warn(`Posible lag en video: ${frameDrops} frames perdidos`);
-            // Reducir calidad si hay mucho lag
-            if (videoEl.playbackRate > 0.5) {
-              videoEl.playbackRate = 0.5;
-            }
-          }
+      // Encontrar qué sheet contiene este frame
+      let sheetIndex = 0;
+      for (let i = 0; i < spriteData.sheets.length; i++) {
+        const sheet = spriteData.sheets[i];
+        if (frameIndex >= sheet.startFrame - 1 && frameIndex <= sheet.endFrame - 1) {
+          sheetIndex = i;
+          break;
         }
       }
-      lastFrameTime = now;
 
-      if (videoEl.readyState >= 2) { // Al menos cargado parcialmente
-        requestAnimationFrame(monitorVideoPerformance);
-      }
+      const sheet = spriteData.sheets[sheetIndex];
+      const frameInSheet = frameIndex - (sheet.startFrame - 1);
+      const row = Math.floor(frameInSheet / spriteData.framesPerRow);
+      const col = frameInSheet % spriteData.framesPerRow;
+
+      return {
+        x: col * spriteData.frameWidth,
+        y: row * spriteData.frameHeight,
+        sheet: sheetIndex
+      };
     }
 
-    // Iniciar monitoreo cuando el video esté listo
-    videoEl.addEventListener('loadeddata', () => {
-      requestAnimationFrame(monitorVideoPerformance);
-    });
-
-    // Precargar más frames del video
-    videoEl.addEventListener('canplaythrough', () => {
-      console.log('Video puede reproducirse completamente');
-      // Intentar precargar más
-      if (videoEl.buffered.length > 0) {
-        const bufferedEnd = videoEl.buffered.end(videoEl.buffered.length - 1);
-        if (bufferedEnd < videoEl.duration * 0.5) {
-          console.log('Buffering adicional para mejorar fluidez');
-        }
-      }
-    });
-
-    // Log de eventos de carga para debug
-    videoEl.addEventListener('waiting', () => console.log('Video esperando datos...'));
-    videoEl.addEventListener('playing', () => console.log('Video reproduciéndose'));
-    videoEl.addEventListener('stalled', () => console.warn('Video stalled - sin datos'));
-    videoEl.addEventListener('suspend', () => console.log('Video suspendido para ahorrar recursos'));
-
-    function updateVideo(force = false) {
+    function updateSprite(force = false) {
       const now = performance.now();
 
-      // Throttling: solo actualizar cada 33ms (30fps) para scroll más suave
       if (!force && now - lastUpdateTime < minUpdateInterval) {
         return;
       }
 
-      if (!isVideoReady || !videoDuration) return;
+      if (!spriteData) return;
 
       lastUpdateTime = now;
 
@@ -443,20 +446,19 @@ const { data } = generalData;
         cachedWindowHeight = window.innerHeight;
       }
 
-      // Progreso del scroll dentro de la sección
+      // Progreso del scroll
       const scrolled = -heroTop;
-      const scrollable = Math.max(cachedHeroHeight - cachedWindowHeight, 1); // Evitar división por cero
+      const scrollable = Math.max(cachedHeroHeight - cachedWindowHeight, 1);
 
       let progress = 0;
-      let targetTime = 0;
       let scale = 1.2;
 
       if (scrolled <= 0) {
-        targetTime = 0;
+        progress = 0;
         scale = 1.2;
         if (heroContent) heroContent.classList.remove('visible');
       } else if (scrolled >= scrollable) {
-        targetTime = videoDuration;
+        progress = 1;
         scale = 1.0;
         if (heroContent) heroContent.classList.add('visible');
       } else {
@@ -464,12 +466,8 @@ const { data } = generalData;
 
         // El video termina al 50% del scroll
         const videoProgress = Math.min(progress / 0.5, 1);
-        targetTime = videoProgress * videoDuration;
-
-        // Zoom out effect
         scale = 1.2 - (videoProgress * 0.2);
 
-        // El contenido aparece después del 60% del scroll
         if (progress > 0.6 && heroContent) {
           heroContent.classList.add('visible');
         } else if (heroContent) {
@@ -477,74 +475,71 @@ const { data } = generalData;
         }
       }
 
-      // Usar interpolación suave para el tiempo del video
-      if (Math.abs(videoEl.currentTime - targetTime) > 0.05) { // Umbral más pequeño para más suavidad
-        // Cancelar animación anterior si existe
-        if (animationFrameId) {
-          cancelAnimationFrame(animationFrameId);
-        }
+      // Calcular frame actual
+      const videoProgress = Math.min(progress / 0.5, 1);
+      const currentFrame = Math.floor(videoProgress * (spriteData.totalFrames - 1));
+      const clampedFrame = Math.max(0, Math.min(currentFrame, spriteData.totalFrames - 1));
 
-        // Interpolación lineal suave
-        const startTime = videoEl.currentTime;
-        const endTime = targetTime;
-        const duration = 200; // ms para la transición
-        let startTimestamp: number | null = null;
+      // Obtener posición del frame
+      const pos = getFramePosition(clampedFrame);
 
-        const animateTime = (timestamp: number) => {
-          if (!startTimestamp) startTimestamp = timestamp;
-          const elapsed = timestamp - startTimestamp;
-          const t = Math.min(elapsed / duration, 1);
-
-          // Easing function para transición más natural
-          const easedT = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-
-          videoEl.currentTime = startTime + (endTime - startTime) * easedT;
-
-          if (t < 1) {
-            animationFrameId = requestAnimationFrame(animateTime);
-          } else {
-            animationFrameId = null;
-          }
-        };
-
-        animationFrameId = requestAnimationFrame(animateTime);
+      // Cambiar imagen si es necesario
+      if (pos.sheet !== currentSheetIndex) {
+        currentSheetIndex = pos.sheet;
+        spriteEl.style.backgroundImage = `url('/sprites/${spriteData.sheets[pos.sheet].file}')`;
       }
 
-      // Aplicar transformación de zoom
-      videoEl.style.transform = `translate3d(-50%, -50%, 0) scale(${scale})`;
+      // Actualizar posición del background con escalado como object-fit: cover
+      const containerW = spriteEl.offsetWidth;
+      const containerH = spriteEl.offsetHeight;
+
+      const scaleX = containerW / spriteData.frameWidth;
+      const scaleY = containerH / spriteData.frameHeight;
+      const frameScale = Math.max(scaleX, scaleY);
+
+      const scaledFrameW = spriteData.frameWidth * frameScale;
+      const scaledFrameH = spriteData.frameHeight * frameScale;
+
+      const sheet = spriteData.sheets[pos.sheet];
+      const rows = Math.ceil(sheet.frames / spriteData.framesPerRow);
+      const totalSheetW = scaledFrameW * spriteData.framesPerRow;
+      const totalSheetH = scaledFrameH * rows;
+
+      const bgX = -(pos.x * frameScale) + (containerW - scaledFrameW) / 2;
+      const bgY = -(pos.y * frameScale) + (containerH - scaledFrameH) / 2;
+
+      spriteEl.style.backgroundSize = `${totalSheetW}px ${totalSheetH}px`;
+      spriteEl.style.backgroundPosition = `${bgX}px ${bgY}px`;
+
+      // Aplicar zoom
+      spriteEl.style.transform = `translate3d(-50%, -50%, 0) scale(${scale})`;
     }
 
-    // Optimización: usar Intersection Observer para detectar cuando la sección está visible
+    // Optimización: Intersection Observer
     let observer: IntersectionObserver | null = null;
     if ('IntersectionObserver' in window) {
       observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            // Cuando el hero es visible, asegurar que el video esté listo
-            if (!isVideoReady) {
-              videoEl.load();
-            }
+          if (entry.isIntersecting && framesLoaded) {
+            updateSprite(true);
           }
         });
-      }, {
-        threshold: 0.1
-      });
+      }, { threshold: 0.1 });
 
       observer.observe(heroEl);
     }
 
-    // Usar requestAnimationFrame con throttling mejorado y debouncing
+    // Scroll listener optimizado
     let ticking = false;
     let lastScrollY = window.scrollY;
     let lastScrollTime = 0;
-    const scrollDebounce = 50; // ms entre actualizaciones
+    const scrollDebounce = 32;
 
     function handleScroll() {
       const currentScrollY = window.scrollY;
       const currentTime = Date.now();
 
-      // Solo procesar si hay scroll significativo (>3px) y ha pasado el debounce time
-      if (Math.abs(currentScrollY - lastScrollY) < 3 ||
+      if (Math.abs(currentScrollY - lastScrollY) < 2 ||
           (currentTime - lastScrollTime) < scrollDebounce) {
         return;
       }
@@ -554,75 +549,52 @@ const { data } = generalData;
 
       if (!ticking) {
         requestAnimationFrame(() => {
-          updateVideo();
+          updateSprite();
           ticking = false;
         });
         ticking = true;
       }
     }
 
-    // Usar passive scroll listener para mejor rendimiento
     window.addEventListener('scroll', handleScroll, { passive: true });
 
-    // Actualizar también al redimensionar (con debouncing más agresivo)
+    // Resize handler
     let resizeTimeout: NodeJS.Timeout | null = null;
     let lastResizeTime = 0;
 
     function handleResize() {
       const now = Date.now();
-      // Debouncing agresivo: solo actualizar cada 250ms
       if (now - lastResizeTime < 250) {
-        if (resizeTimeout) {
-          clearTimeout(resizeTimeout);
-        }
+        if (resizeTimeout) clearTimeout(resizeTimeout);
       }
 
       lastResizeTime = now;
-      if (resizeTimeout) {
-        clearTimeout(resizeTimeout);
-      }
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+
       resizeTimeout = setTimeout(() => {
         cachedWindowHeight = window.innerHeight;
         cachedHeroHeight = heroEl.offsetHeight;
-        updateVideo(true); // Forzar actualización
+        updateSprite(true);
       }, 250);
     }
 
     window.addEventListener('resize', handleResize);
 
-    // Cleanup function para limpiar event listeners y animation frames
+    // Cleanup
     function cleanup() {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
-      }
-      if (observer) {
-        observer.disconnect();
-      }
-      if (resizeTimeout) {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = null;
-      }
+      if (observer) observer.disconnect();
+      if (resizeTimeout) clearTimeout(resizeTimeout);
     }
 
-    // Limpiar al salir de la página
     window.addEventListener('beforeunload', cleanup);
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        if (animationFrameId) {
-          cancelAnimationFrame(animationFrameId);
-          animationFrameId = null;
-        }
-      } else {
-        // Al volver a la página, actualizar
-        updateVideo(true);
-      }
+      if (!document.hidden) updateSprite(true);
     });
 
-    // Ejecutar una vez al inicio con retraso para permitir carga
-    setTimeout(() => updateVideo(true), 300);
+    // Ejecutar una vez al inicio
+    setTimeout(() => updateSprite(true), 100);
   });
 </script>
 
