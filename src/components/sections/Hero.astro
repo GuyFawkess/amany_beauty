@@ -190,14 +190,18 @@ const { data } = generalData;
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const video = document.getElementById('heroVideo');
-    const hero = document.getElementById('scroll-hero');
-    const heroContent = document.getElementById('heroContent');
+    const video = document.getElementById('heroVideo') as HTMLVideoElement | null;
+    const hero = document.getElementById('scroll-hero') as HTMLElement | null;
+    const heroContent = document.getElementById('heroContent') as HTMLElement | null;
 
     if (!video || !hero) {
       console.error('No se encontraron los elementos del hero');
       return;
     }
+
+    // TypeScript now knows video and hero are not null after this point
+    const videoEl = video;
+    const heroEl = hero;
 
     console.log('Video y hero encontrados');
 
@@ -209,15 +213,15 @@ const { data } = generalData;
 
     if (isMobile || prefersReduced) {
       // En móvil: autoplay una sola vez y parar en el último frame
-      video.autoplay = true;
-      video.loop = false;
-      video.muted = true;
-      video.play().catch(err => console.error('Error autoplay:', err));
+      videoEl.autoplay = true;
+      videoEl.loop = false;
+      videoEl.muted = true;
+      videoEl.play().catch(err => console.error('Error autoplay:', err));
 
       // Cuando el video termine, asegurar que se quede en el último frame
-      video.addEventListener('ended', () => {
-        video.currentTime = video.duration;
-        video.pause();
+      videoEl.addEventListener('ended', () => {
+        videoEl.currentTime = videoEl.duration;
+        videoEl.pause();
       });
 
       console.log('Modo móvil: autoplay activado (una vez)');
@@ -225,29 +229,29 @@ const { data } = generalData;
     }
 
     // Desktop: scroll-driven
-    video.pause();
-    video.currentTime = 0;
+    videoEl.pause();
+    videoEl.currentTime = 0;
 
     let isVideoReady = false;
 
-    video.addEventListener('loadedmetadata', () => {
+    videoEl.addEventListener('loadedmetadata', () => {
       isVideoReady = true;
-      console.log('Video listo, duración:', video.duration);
+      console.log('Video listo, duración:', videoEl.duration);
     });
 
-    video.addEventListener('error', (e) => {
+    videoEl.addEventListener('error', (e) => {
       console.error('Error cargando video:', e);
     });
 
     // Forzar carga
-    video.load();
+    videoEl.load();
 
     function updateVideo() {
-      if (!isVideoReady || !video.duration) return;
+      if (!isVideoReady || !videoEl.duration) return;
 
-      const heroRect = hero.getBoundingClientRect();
+      const heroRect = heroEl.getBoundingClientRect();
       const heroTop = heroRect.top;
-      const heroHeight = hero.offsetHeight;
+      const heroHeight = heroEl.offsetHeight;
       const windowHeight = window.innerHeight;
 
       // Progreso del scroll dentro de la sección
@@ -255,13 +259,13 @@ const { data } = generalData;
       const scrollable = heroHeight - windowHeight;
 
       if (scrolled <= 0) {
-        video.currentTime = 0;
+        videoEl.currentTime = 0;
         if (heroContent) heroContent.classList.remove('visible');
         return;
       }
 
       if (scrolled >= scrollable) {
-        video.currentTime = video.duration;
+        videoEl.currentTime = videoEl.duration;
         if (heroContent) heroContent.classList.add('visible');
         return;
       }
@@ -270,11 +274,11 @@ const { data } = generalData;
 
       // El video termina al 50% del scroll
       const videoProgress = Math.min(progress / 0.5, 1);
-      video.currentTime = videoProgress * video.duration;
+      videoEl.currentTime = videoProgress * videoEl.duration;
 
       // Zoom out effect
       const scale = 1.2 - (videoProgress * 0.2);
-      video.style.transform = `translate(-50%, -50%) scale(${scale})`;
+      videoEl.style.transform = `translate(-50%, -50%) scale(${scale})`;
 
       // El contenido aparece después del 60% del scroll
       if (progress > 0.6 && heroContent) {
