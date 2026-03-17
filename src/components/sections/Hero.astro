@@ -13,7 +13,6 @@ const { data } = generalData;
       id="heroVideo"
       playsinline
       muted
-      autoplay
       preload="auto"
       poster="/video-poster.jpg"
     >
@@ -224,6 +223,7 @@ const { data } = generalData;
 
     if (isMobile || prefersReduced) {
       // En móvil: autoplay una sola vez y parar en el último frame
+      videoEl.autoplay = true;
       videoEl.loop = false;
       videoEl.muted = true;
       videoEl.playsInline = true;
