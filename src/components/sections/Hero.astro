@@ -11,11 +11,13 @@ const { data } = generalData;
   <div class="scroll-video-sticky">
     <video
       id="heroVideo"
-      src="/videoHero.webm"
+      src="/videoHero.mp4"
       playsinline
       muted
+      autoplay
       preload="auto"
       poster="/video-poster.jpg"
+      type="video/mp4"
     ></video>
 
     <div class="hero-content" id="heroContent">
@@ -221,29 +223,53 @@ const { data } = generalData;
 
     if (isMobile || prefersReduced) {
       // En móvil: autoplay una sola vez y parar en el último frame
-      videoEl.autoplay = true;
       videoEl.loop = false;
       videoEl.muted = true;
       videoEl.playsInline = true;
 
-      // Esperar a que el video esté listo antes de reproducir
-      const playVideo = () => {
-        videoEl.play().catch(err => {
-          console.error('Error autoplay:', err);
-          // Si falla el autoplay, intentar cargar y reproducir manualmente
-          videoEl.load();
-          setTimeout(() => {
-            videoEl.play().catch(e => console.warn('Segundo intento fallido:', e));
-          }, 500);
-        });
+      // Función para intentar reproducir con múltiples intentos
+      const attemptPlay = (attempt = 0) => {
+        videoEl.play()
+          .then(() => {
+            console.log('Video reproduciéndose exitosamente en móvil');
+          })
+          .catch(err => {
+            console.error(`Error autoplay intento ${attempt}:`, err);
+            if (attempt < 3) {
+              // Reintentar con diferentes estrategias
+              setTimeout(() => {
+                videoEl.load();
+                setTimeout(() => attemptPlay(attempt + 1), 300);
+              }, 500);
+            }
+          });
       };
 
-      // Intentar reproducir inmediatamente si ya está cargado
-      if (videoEl.readyState >= 3) { // HAVE_FUTURE_DATA
-        playVideo();
-      } else {
-        videoEl.addEventListener('canplay', playVideo, { once: true });
-      }
+      // Esperar a que el video tenga datos suficientes
+      const tryPlayWhenReady = () => {
+        if (videoEl.readyState >= 2) { // HAVE_CURRENT_DATA
+          attemptPlay();
+        } else {
+          // Escuchar múltiples eventos para compatibilidad con iOS
+          const events = ['loadeddata', 'canplay', 'canplaythrough'];
+          const handler = () => {
+            events.forEach(ev => videoEl.removeEventListener(ev, handler));
+            attemptPlay();
+          };
+          events.forEach(ev => videoEl.addEventListener(ev, handler, { once: true }));
+
+          // Fallback: intentar después de un tiempo
+          setTimeout(() => {
+            if (videoEl.readyState >= 2) {
+              attemptPlay();
+            }
+          }, 1000);
+        }
+      };
+
+      // Iniciar carga del video
+      videoEl.load();
+      tryPlayWhenReady();
 
       // Cuando el video termine, mostrar el contenido con transición suave
       videoEl.addEventListener('ended', () => {
@@ -255,7 +281,20 @@ const { data } = generalData;
           heroContent.style.opacity = '1';
           heroContent.classList.add('visible');
         }
-      });
+      }, { once: true });
+
+      // Detectar interacción del usuario para retry si autoplay falló
+      const retryOnInteraction = () => {
+        if (videoEl.paused && videoEl.readyState >= 2) {
+          videoEl.play().catch(e => console.warn('Play en interacción fallido:', e));
+        }
+        // Remover listener después del primer intento
+        document.removeEventListener('touchstart', retryOnInteraction);
+        document.removeEventListener('click', retryOnInteraction);
+      };
+
+      document.addEventListener('touchstart', retryOnInteraction, { once: true, passive: true });
+      document.addEventListener('click', retryOnInteraction, { once: true });
 
       console.log('Modo móvil: autoplay activado (una vez)');
       return;
