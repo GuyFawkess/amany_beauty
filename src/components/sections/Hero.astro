@@ -7,51 +7,48 @@ const generalData = await getEntry('site', 'general');
 const { data } = generalData;
 ---
 
-<section class="hero" id="hero">
-  <!-- Video Background -->
-  <video
-    class="hero__video"
-    autoplay
-    muted
-    loop
-    playsinline
-    poster="/hero-poster.jpg"
-  >
-    <source src="/hero-video.mp4" type="video/mp4" />
-  </video>
+<section class="scroll-video-hero" id="scroll-hero">
+  <div class="scroll-video-sticky">
+    <video
+      id="heroVideo"
+      src="/videoHero.mp4"
+      playsinline
+      muted
+      preload="auto"
+    ></video>
 
-  <!-- Overlay -->
-  <div class="hero__overlay"></div>
+    <div class="hero-content" id="heroContent">
+      <h1 class="hero__tagline">
+        {lang === 'es' ? data.tagline : data.tagline_en}
+      </h1>
 
-  <!-- Content -->
-  <div class="hero__container">
-    <h1 class="hero__tagline">
-      {lang === 'es' ? data.tagline : data.tagline_en}
-    </h1>
-
-    <div class="hero__cta">
-      <a href={`/${lang}/#about`} class="hero__cta-button hero__cta-button--primary">
-        {lang === 'es' ? 'Conócenos' : 'About Us'}
-      </a>
-      <a href={`/${lang}/#contact`} class="hero__cta-button hero__cta-button--secondary">
-        {lang === 'es' ? 'Reservar' : 'Book Now'}
-      </a>
+      <div class="hero__cta">
+        <a href={`/${lang}/#about`} class="hero__cta-button hero__cta-button--primary">
+          {lang === 'es' ? 'Conócenos' : 'About Us'}
+        </a>
+        <a href={`/${lang}/#contact`} class="hero__cta-button hero__cta-button--secondary">
+          {lang === 'es' ? 'Reservar' : 'Book Now'}
+        </a>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .hero {
+  .scroll-video-hero {
+    height: 250vh;
     position: relative;
+  }
+
+  .scroll-video-sticky {
+    position: sticky;
+    top: 0;
     height: 100vh;
     width: 100%;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
-  .hero__video {
+  .scroll-video-sticky video {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -59,35 +56,35 @@ const { data } = generalData;
     min-height: 100%;
     width: auto;
     height: auto;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1.2);
     object-fit: cover;
-    z-index: 1;
+    will-change: transform;
   }
 
-  .hero__overlay {
+  .hero-content {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
     background: linear-gradient(
       to bottom,
       rgba(0, 0, 0, 0.3),
       rgba(0, 0, 0, 0.5)
     );
-    z-index: 2;
+    padding: 1rem;
+    gap: 2rem;
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
   }
 
-  .hero__container {
-    position: relative;
-    z-index: 3;
-    max-width: var(--max-width);
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    padding: 1rem;
+  .hero-content.visible {
+    opacity: 1;
   }
 
   .hero__tagline {
@@ -163,4 +160,148 @@ const { data } = generalData;
       font-size: var(--text-5xl);
     }
   }
+
+  /* Móvil — autoplay en lugar de scroll-driven */
+  @media (max-width: 768px) {
+    .scroll-video-hero {
+      height: 100vh;
+    }
+    .scroll-video-sticky {
+      position: relative;
+    }
+    .hero-content {
+      opacity: 1;
+    }
+    .scroll-video-sticky video {
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  /* Respeta preferencia de movimiento reducido */
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-video-hero {
+      height: 100vh;
+    }
+    .hero-content {
+      opacity: 1;
+    }
+  }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const video = document.getElementById('heroVideo');
+    const hero = document.getElementById('scroll-hero');
+    const heroContent = document.getElementById('heroContent');
+
+    if (!video || !hero) {
+      console.error('No se encontraron los elementos del hero');
+      return;
+    }
+
+    console.log('Video y hero encontrados');
+
+    // Detectar móvil
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    console.log('Es móvil:', isMobile, 'Movimiento reducido:', prefersReduced);
+
+    if (isMobile || prefersReduced) {
+      // En móvil: autoplay una sola vez y parar en el último frame
+      video.autoplay = true;
+      video.loop = false;
+      video.muted = true;
+      video.play().catch(err => console.error('Error autoplay:', err));
+
+      // Cuando el video termine, asegurar que se quede en el último frame
+      video.addEventListener('ended', () => {
+        video.currentTime = video.duration;
+        video.pause();
+      });
+
+      console.log('Modo móvil: autoplay activado (una vez)');
+      return;
+    }
+
+    // Desktop: scroll-driven
+    video.pause();
+    video.currentTime = 0;
+
+    let isVideoReady = false;
+
+    video.addEventListener('loadedmetadata', () => {
+      isVideoReady = true;
+      console.log('Video listo, duración:', video.duration);
+    });
+
+    video.addEventListener('error', (e) => {
+      console.error('Error cargando video:', e);
+    });
+
+    // Forzar carga
+    video.load();
+
+    function updateVideo() {
+      if (!isVideoReady || !video.duration) return;
+
+      const heroRect = hero.getBoundingClientRect();
+      const heroTop = heroRect.top;
+      const heroHeight = hero.offsetHeight;
+      const windowHeight = window.innerHeight;
+
+      // Progreso del scroll dentro de la sección
+      const scrolled = -heroTop;
+      const scrollable = heroHeight - windowHeight;
+
+      if (scrolled <= 0) {
+        video.currentTime = 0;
+        if (heroContent) heroContent.classList.remove('visible');
+        return;
+      }
+
+      if (scrolled >= scrollable) {
+        video.currentTime = video.duration;
+        if (heroContent) heroContent.classList.add('visible');
+        return;
+      }
+
+      const progress = scrolled / scrollable;
+
+      // El video termina al 50% del scroll
+      const videoProgress = Math.min(progress / 0.5, 1);
+      video.currentTime = videoProgress * video.duration;
+
+      // Zoom out effect
+      const scale = 1.2 - (videoProgress * 0.2);
+      video.style.transform = `translate(-50%, -50%) scale(${scale})`;
+
+      // El contenido aparece después del 60% del scroll
+      if (progress > 0.6 && heroContent) {
+        heroContent.classList.add('visible');
+      } else if (heroContent) {
+        heroContent.classList.remove('visible');
+      }
+    }
+
+    // Usar requestAnimationFrame para suavidad
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateVideo();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // Actualizar también al redimensionar
+    window.addEventListener('resize', updateVideo);
+
+    // Ejecutar una vez al inicio
+    updateVideo();
+  });
+</script>
+
+
