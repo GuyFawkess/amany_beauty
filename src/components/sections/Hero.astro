@@ -508,6 +508,8 @@ const { data } = generalData;
       const bgX = -(pos.x * frameScale) + (containerW - scaledFrameW) / 2;
       const bgY = -(pos.y * frameScale) + (containerH - scaledFrameH) / 2;
 
+      if (!spriteEl) return;
+
       spriteEl.style.backgroundSize = `${totalSheetW}px ${totalSheetH}px`;
       spriteEl.style.backgroundPosition = `${bgX}px ${bgY}px`;
 
