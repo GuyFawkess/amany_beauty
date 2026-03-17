@@ -11,14 +11,15 @@ const { data } = generalData;
   <div class="scroll-video-sticky">
     <video
       id="heroVideo"
-      src="/videoHero.mp4"
       playsinline
       muted
       autoplay
       preload="auto"
       poster="/video-poster.jpg"
-      type="video/mp4"
-    ></video>
+    >
+      <source src="/videoHero.mp4" type="video/mp4" />
+      <source src="/videoHero.webm" type="video/webm" />
+    </video>
 
     <div class="hero-content" id="heroContent">
       <h1 class="hero__tagline">
