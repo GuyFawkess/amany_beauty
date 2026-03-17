@@ -358,6 +358,10 @@ const { data } = generalData;
 
       console.log('Sprite data cargado:', spriteData);
 
+      if (!spriteData) {
+        throw new Error('spriteData is null after loading');
+      }
+
       // Precargar todas las imágenes del sprite
       const loadPromises = spriteData.sheets.map(async (sheet, index) => {
         return new Promise<HTMLImageElement>((resolve, reject) => {
@@ -486,10 +490,14 @@ const { data } = generalData;
       // Cambiar imagen si es necesario
       if (pos.sheet !== currentSheetIndex) {
         currentSheetIndex = pos.sheet;
-        spriteEl.style.backgroundImage = `url('/sprites/${spriteData.sheets[pos.sheet].file}')`;
+        if (spriteEl) {
+          spriteEl.style.backgroundImage = `url('/sprites/${spriteData.sheets[pos.sheet].file}')`;
+        }
       }
 
       // Actualizar posición del background con escalado como object-fit: cover
+      if (!spriteEl) return;
+
       const containerW = spriteEl.offsetWidth;
       const containerH = spriteEl.offsetHeight;
 
