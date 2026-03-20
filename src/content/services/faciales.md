@@ -5,7 +5,7 @@ slug_es: "faciales"
 slug_en: "facials"
 description: "Tratamientos faciales especializados para cada tipo de piel. Tecnología y naturaleza al servicio de tu belleza."
 description_en: "Specialised facial treatments for every skin type. Technology and nature at the service of your beauty."
-coverImage: "/images/services/faciales/cover.jpg"
+coverImage: "/images/services/faciales/cuidado-facial.jpeg"
 sortOrder: 2
 body_es: "Cada rostro es único. Nuestros tratamientos faciales combinan aparatología de última generación con productos de alta calidad para darte resultados visibles desde la primera sesión."
 body_en: "Every face is unique. Our facial treatments combine the latest technology with high-quality products to deliver visible results from the very first session."
@@ -16,7 +16,7 @@ treatments:
     description_en: "Deep facial cleansing with technology that hydrates, exfoliates and renews the skin, leaving it fresh, radiant and revitalised."
     duration: ""
     price: "40€"
-    image: "/images/services/faciales/hidrafacial.jpg"
+    image: "/images/services/faciales/hidrafacial.jpeg"
 
   - name: "Microneedling (dermapen)"
     name_en: "Microneedling (dermapen)"
@@ -24,7 +24,7 @@ treatments:
     description_en: "Therapy using microneedles to stimulate collagen production, improving skin texture. Ideal for skin with blemishes, acne or dehydration."
     duration: ""
     price: "50€"
-    image: "/images/services/faciales/microneedling.jpg"
+    image: "/images/services/faciales/microneedling.jpeg"
 
   - name: "Renovación total"
     name_en: "Total Renewal"
@@ -32,7 +32,7 @@ treatments:
     description_en: "Our star treatment combines exfoliation and micro-stimulation for luminous, renewed skin."
     duration: ""
     price: "54€"
-    image: "/images/services/faciales/renovacion-total.jpg"
+    image: "/images/services/faciales/renovacion-total.jpeg"
 
   - name: "Pure Hydration"
     name_en: "Pure Hydration"
@@ -40,7 +40,7 @@ treatments:
     description_en: "Deeply hydrates the skin, restoring its natural balance."
     duration: ""
     price: "35€"
-    image: "/images/services/faciales/pure-hydration.jpg"
+    image: "/images/services/faciales/pure-hydratation.jpeg"
 
   - name: "Pure Glow"
     name_en: "Pure Glow"
@@ -48,7 +48,7 @@ treatments:
     description_en: "Illuminates and revitalises dull skin, restoring a fresh and radiant appearance."
     duration: ""
     price: "35€"
-    image: "/images/services/faciales/pure-glow.jpg"
+    image: "/images/services/faciales/pure-glow.jpeg"
 
   - name: "Purificante detox"
     name_en: "Purifying Detox"
@@ -56,5 +56,5 @@ treatments:
     description_en: "Balances oil production, reduces shine and helps prevent imperfections."
     duration: ""
     price: "35€"
-    image: "/images/services/faciales/purificante-detox.jpg"
+    image: "/images/services/faciales/detox.jpeg"
 ---

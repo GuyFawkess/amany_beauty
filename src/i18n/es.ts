@@ -33,6 +33,7 @@ export const es = {
   // Gallery
   gallery: {
     title: 'Galería',
+    subtitle: 'Un vistazo a nuestro espacio de belleza y los tratamientos que ofrecemos con amor y dedicación',
   },
 
   // Contact

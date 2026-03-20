@@ -5,7 +5,7 @@ slug_es: "masajes"
 slug_en: "massages"
 description: "Tratamientos personalizados para recuperar el equilibrio de tu cuerpo y mente."
 description_en: "Personalised treatments to restore balance to your body and mind."
-coverImage: "/images/services/masajes/cover.jpg"
+coverImage: "/images/services/masajes/masajes.jpeg"
 sortOrder: 1
 body_es: "Nuestros masajes están diseñados para ofrecerte un momento de descanso y recuperación real. Cada tratamiento se adapta a tus necesidades, trabajando cuerpo y mente para que salgas renovada."
 body_en: "Our massages are designed to give you a moment of genuine rest and recovery. Each treatment adapts to your needs, working body and mind so you leave feeling renewed."
@@ -16,7 +16,7 @@ treatments:
     description_en: "Total relaxation of body and mind, including foot and head massage."
     duration: "55 min"
     price: "45€"
-    image: "/images/services/masajes/full-body.jpg"
+    image: "/images/services/masajes/full_body.jpeg"
 
   - name: "Relajante localizado"
     name_en: "Localised Relaxing Massage"
@@ -24,7 +24,7 @@ treatments:
     description_en: "Localised relaxing massage, choose between back or legs."
     duration: "30 min"
     price: "25€"
-    image: "/images/services/masajes/relajante-localizado.jpg"
+    image: "/images/services/masajes/relajante_masaje.jpeg"
 
   - name: "Descontracturante"
     name_en: "Deep Tissue Massage"
@@ -32,7 +32,7 @@ treatments:
     description_en: "Treatment focused on relieving muscle contractures and knots, releasing deep tension and improving mobility."
     duration: "55 min"
     price: "47€"
-    image: "/images/services/masajes/descontracturante.jpg"
+    image: "/images/services/masajes/relajante_masaje.jpeg"
 
   - name: "Localizado descontracturante"
     name_en: "Localised Deep Tissue"
@@ -40,7 +40,7 @@ treatments:
     description_en: "Localised treatment focused on back, neck and shoulders."
     duration: "30 min"
     price: "27€"
-    image: "/images/services/masajes/localizado-descontracturante.jpg"
+    image: "/images/services/masajes/localizado_masaje.jpeg"
 
   - name: "Pies cansados"
     name_en: "Tired Feet"
@@ -48,7 +48,7 @@ treatments:
     description_en: "Relax and revitalise your feet so you can walk again with comfort and lightness."
     duration: "20 min"
     price: "20€"
-    image: "/images/services/masajes/pies-cansados.jpg"
+    image: "/images/services/masajes/pies_masaje.jpeg"
 
   - name: "Craneal"
     name_en: "Cranial Massage"
@@ -56,7 +56,7 @@ treatments:
     description_en: "Relieves tension and improves circulation to release stress and promote a deep sense of wellbeing."
     duration: "25 min"
     price: "20€"
-    image: "/images/services/masajes/craneal.jpg"
+    image: "/images/services/masajes/craneal_masaje.jpeg"
 
   - name: "Craneofacial"
     name_en: "Craniofacial Massage"
@@ -64,7 +64,7 @@ treatments:
     description_en: "Releases tension in the head and face, helping you disconnect, deeply relax and feel renewed."
     duration: "40 min"
     price: "32€"
-    image: "/images/services/masajes/craneofacial.jpg"
+    image: "/images/services/masajes/craneofacial_masaje.jpeg"
 
   - name: "Premamá"
     name_en: "Prenatal Massage"
@@ -72,5 +72,5 @@ treatments:
     description_en: "Specialised massage that improves circulation, reduces muscle discomfort and promotes overall wellbeing during pregnancy."
     duration: "45 min"
     price: "38€"
-    image: "/images/services/masajes/premama.jpg"
+    image: "/images/services/masajes/maternity_masaje.jpeg"
 ---

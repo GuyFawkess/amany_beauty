@@ -16,24 +16,36 @@ const images = galleryData.data.images || [];
       {t.gallery.title}
     </h2>
 
+    <p class="gallery-section__subtitle">
+      {t.gallery.subtitle}
+    </p>
+
     <div class="gallery-grid">
       {/* Render 8 placeholders, or actual images if they exist */}
       {Array.from({ length: 8 }).map((_, index) => {
         const image = images[index];
         return (
           <div class="gallery-grid__item">
-            {image ? (
-              <img
-                src={image.src}
-                alt={lang === 'es' ? image.alt : (image.alt_en || image.alt)}
-                class="gallery-grid__image"
-              />
-            ) : (
-              <ImagePlaceholder
-                aspectRatio="1/1"
-                alt="Galería imagen"
-              />
-            )}
+            <div class="gallery-grid__image-container">
+              {image ? (
+                <img
+                  src={image.src}
+                  alt={lang === 'es' ? image.alt : (image.alt_en || image.alt)}
+                  class="gallery-grid__image"
+                  loading="lazy"
+                />
+              ) : (
+                <ImagePlaceholder
+                  aspectRatio="1/1"
+                  alt="Galería imagen"
+                />
+              )}
+              <div class="gallery-grid__overlay">
+                <span class="gallery-grid__overlay-text">
+                  {image ? (lang === 'es' ? image.alt : (image.alt_en || image.alt)) : "Galería"}
+                </span>
+              </div>
+            </div>
           </div>
         );
       })}
@@ -44,12 +56,36 @@ const images = galleryData.data.images || [];
 <style>
   .gallery-section {
     padding: var(--space-section-mobile) 1rem;
-    background-color: var(--color-white-warm);
+    background: linear-gradient(135deg, #faf8f5 0%, #f5f2ee 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gallery-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(214, 199, 185, 0.3), transparent);
+  }
+
+  .gallery-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(214, 199, 185, 0.3), transparent);
   }
 
   .gallery-section__container {
     max-width: var(--max-width);
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
   }
 
   .gallery-section__title {
@@ -58,7 +94,21 @@ const images = galleryData.data.images || [];
     font-weight: 400;
     color: var(--color-text-dark);
     text-align: center;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .gallery-section__subtitle {
+    font-family: var(--font-sans);
+    font-size: var(--text-lg);
+    font-weight: 300;
+    color: var(--color-text-light);
+    text-align: center;
     margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
   }
 
   .gallery-grid {
@@ -70,19 +120,68 @@ const images = galleryData.data.images || [];
   .gallery-grid__item {
     position: relative;
     overflow: hidden;
-    border-radius: 4px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: transform var(--transition-base);
+    transition: all var(--transition-slow);
+    aspect-ratio: 1/1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 
   .gallery-grid__item:hover {
-    transform: scale(1.02);
+    transform: translateY(-8px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+  }
+
+  .gallery-grid__image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 12px;
   }
 
   .gallery-grid__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform var(--transition-slow), filter var(--transition-base);
+    filter: brightness(0.95);
+  }
+
+  .gallery-grid__item:hover .gallery-grid__image {
+    transform: scale(1.05);
+    filter: brightness(1.05);
+  }
+
+  .gallery-grid__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
+    padding: 3rem 1rem 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--transition-base), transform var(--transition-base);
+    pointer-events: none;
+  }
+
+  .gallery-grid__item:hover .gallery-grid__overlay {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .gallery-grid__overlay-text {
+    color: white;
+    font-family: var(--font-serif);
+    font-size: var(--text-sm);
+    font-weight: 300;
+    text-align: center;
+    display: block;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+    opacity: 0.95;
   }
 
   @media (min-width: 768px) {
@@ -92,12 +191,31 @@ const images = galleryData.data.images || [];
 
     .gallery-section__title {
       font-size: var(--text-4xl);
+      margin-bottom: 1.5rem;
+    }
+
+    .gallery-section__subtitle {
+      font-size: var(--text-xl);
       margin-bottom: 4rem;
     }
 
     .gallery-grid {
       grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
+      gap: 2rem;
+    }
+
+    .gallery-grid__item {
+      border-radius: 16px;
+    }
+
+    .gallery-grid__overlay-text {
+      font-size: var(--text-base);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .gallery-grid {
+      gap: 2.5rem;
     }
   }
 </style>

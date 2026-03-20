@@ -33,6 +33,7 @@ export const en = {
   // Gallery
   gallery: {
     title: 'Gallery',
+    subtitle: 'A glimpse into our beauty space and the treatments we offer with love and dedication',
   },
 
   // Contact
