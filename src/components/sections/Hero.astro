@@ -9,20 +9,17 @@ const { data } = generalData;
 
 <section class="scroll-video-hero" id="scroll-hero">
   <div class="scroll-video-sticky">
-    <!-- Sprite sheet para desktop -->
-    <div id="heroSprite" class="hero-sprite"></div>
-
-    <!-- Video para móvil -->
+    <!-- Video con versión móvil y desktop -->
     <video
       id="heroVideo"
-      class="hero-video-mobile"
+      class="hero-video"
       playsinline
       muted
       preload="auto"
       poster="/video-poster.jpg"
     >
+      <source src="/videoHeroMobile.mp4" type="video/mp4" media="(max-width: 768px)" />
       <source src="/videoHero.mp4" type="video/mp4" />
-      <source src="/videoHero.webm" type="video/webm" />
     </video>
 
     <div class="hero-content" id="heroContent">
@@ -44,20 +41,19 @@ const { data } = generalData;
 
 <style>
   .scroll-video-hero {
-    height: 250vh;
+    height: 100vh;
     position: relative;
   }
 
   .scroll-video-sticky {
-    position: sticky;
-    top: 0;
+    position: relative;
     height: 100vh;
     width: 100%;
     overflow: hidden;
+    padding-top: var(--nav-height);
   }
 
-  .scroll-video-sticky video,
-  .hero-sprite {
+  .hero-video {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -65,47 +61,13 @@ const { data } = generalData;
     min-height: 100%;
     width: auto;
     height: auto;
-    transform: translate(-50%, -50%) scale(1.2);
+    transform: translate(-50%, -50%) scale(1);
     transform-origin: center center;
     object-fit: cover;
-    /* Optimizaciones de rendimiento */
     will-change: transform;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    transform-style: preserve-3d;
-    /* Forzar aceleración por hardware */
-    transform: translate3d(-50%, -50%, 0) scale(1.2);
-  }
-
-  .hero-sprite {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0) scale(1.2);
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
-    will-change: background-position, background-size;
-    backface-visibility: hidden;
-  }
-
-  /* Ocultar/mostrar según dispositivo */
-  .hero-video-mobile {
-    display: none;
-  }
-
-  .hero-sprite {
-    display: block;
-  }
-
-  @media (max-width: 768px) {
-    .hero-video-mobile {
-      display: block;
-    }
-
-    .hero-sprite {
-      display: none;
-    }
+    transform: translate3d(-50%, -50%, 0) scale(1);
   }
 
   .hero-content {
@@ -124,7 +86,7 @@ const { data } = generalData;
       rgba(0, 0, 0, 0.3),
       rgba(0, 0, 0, 0.5)
     );
-    padding: 1rem;
+    padding: calc(var(--nav-height) + 2rem) 1rem 1rem;
     gap: 2rem;
     opacity: 0;
     transition: opacity 0.8s ease-out;
@@ -208,28 +170,13 @@ const { data } = generalData;
     }
   }
 
-  /* Móvil — autoplay en lugar de scroll-driven */
   @media (max-width: 768px) {
-    .scroll-video-hero {
-      height: 100vh;
-    }
-    .scroll-video-sticky {
-      position: relative;
-    }
-    .hero-content {
-      opacity: 0;
-    }
-    .scroll-video-sticky video,
-    .hero-sprite {
+    .hero-video {
       transform: translate(-50%, -50%) scale(1);
     }
   }
 
-  /* Respeta preferencia de movimiento reducido */
   @media (prefers-reduced-motion: reduce) {
-    .scroll-video-hero {
-      height: 100vh;
-    }
     .hero-content {
       opacity: 1;
     }
@@ -237,374 +184,117 @@ const { data } = generalData;
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', async () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const hero = document.getElementById('scroll-hero') as HTMLElement | null;
     const heroContent = document.getElementById('heroContent') as HTMLElement | null;
-    const spriteEl = document.getElementById('heroSprite') as HTMLElement | null;
     const videoEl = document.getElementById('heroVideo') as HTMLVideoElement | null;
 
-    if (!hero || !spriteEl || !videoEl) {
+    if (!hero || !videoEl) {
       console.error('No se encontraron los elementos del hero');
       return;
     }
 
-    const heroEl = hero;
-
     console.log('Hero elementos encontrados');
 
-    // Detectar móvil
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Flag para evitar múltiples intentos de reproducción
+    let playAttempted = false;
+    let playScheduled = false;
 
-    console.log('Es móvil:', isMobile, 'Movimiento reducido:', prefersReduced);
+    // Configurar video para autoplay
+    videoEl.loop = false;
+    videoEl.muted = true;
+    videoEl.playsInline = true;
 
-    // ============================================
-    // MÓVIL: Video con autoplay
-    // ============================================
-    if (isMobile || prefersReduced) {
-      videoEl.autoplay = true;
-      videoEl.loop = false;
-      videoEl.muted = true;
-      videoEl.playsInline = true;
+    const attemptPlay = (attempt = 0) => {
+      // Si ya se está reproduciendo, no hacer nada
+      if (!videoEl.paused && !videoEl.ended) {
+        console.log('Video ya reproduciéndose, omitiendo intento');
+        playAttempted = true;
+        return;
+      }
 
-      const attemptPlay = (attempt = 0) => {
-        videoEl.play()
-          .then(() => {
-            console.log('Video reproduciéndose exitosamente en móvil');
-          })
-          .catch(err => {
-            console.error(`Error autoplay intento ${attempt}:`, err);
-            if (attempt < 3) {
-              setTimeout(() => {
-                videoEl.load();
-                setTimeout(() => attemptPlay(attempt + 1), 300);
-              }, 500);
-            }
-          });
-      };
+      playAttempted = true;
+      playScheduled = false;
 
-      const tryPlayWhenReady = () => {
-        if (videoEl.readyState >= 2) {
+      videoEl.play()
+        .then(() => {
+          console.log('Video reproduciéndose exitosamente');
+        })
+        .catch(err => {
+          console.error(`Error autoplay intento ${attempt}:`, err);
+          playAttempted = false;
+          if (attempt < 3) {
+            setTimeout(() => {
+              videoEl.load();
+              setTimeout(() => attemptPlay(attempt + 1), 300);
+            }, 500);
+          }
+        });
+    };
+
+    const tryPlayWhenReady = () => {
+      if (playScheduled) return;
+
+      if (videoEl.readyState >= 2) {
+        attemptPlay();
+      } else {
+        playScheduled = true;
+        const events = ['loadeddata', 'canplay', 'canplaythrough'];
+        let eventHandled = false;
+
+        const handler = () => {
+          if (eventHandled) return;
+          eventHandled = true;
+          playScheduled = false;
+          events.forEach(ev => videoEl.removeEventListener(ev, handler));
           attemptPlay();
-        } else {
-          const events = ['loadeddata', 'canplay', 'canplaythrough'];
-          const handler = () => {
-            events.forEach(ev => videoEl.removeEventListener(ev, handler));
-            attemptPlay();
-          };
-          events.forEach(ev => videoEl.addEventListener(ev, handler, { once: true }));
+        };
 
-          setTimeout(() => {
-            if (videoEl.readyState >= 2) {
-              attemptPlay();
-            }
-          }, 1000);
-        }
-      };
+        events.forEach(ev => videoEl.addEventListener(ev, handler, { once: true }));
 
-      videoEl.load();
-      tryPlayWhenReady();
+        setTimeout(() => {
+          if (!eventHandled && videoEl.readyState >= 2) {
+            handler();
+          }
+          playScheduled = false;
+        }, 1000);
+      }
+    };
 
-      videoEl.addEventListener('ended', () => {
-        videoEl.currentTime = videoEl.duration;
-        videoEl.pause();
+    videoEl.load();
+    tryPlayWhenReady();
 
-        if (heroContent) {
-          heroContent.style.opacity = '1';
-          heroContent.classList.add('visible');
-        }
-      }, { once: true });
+    // Mostrar contenido cuando el video termine
+    videoEl.addEventListener('ended', () => {
+      videoEl.currentTime = videoEl.duration;
+      videoEl.pause();
 
-      const retryOnInteraction = () => {
-        if (videoEl.paused && videoEl.readyState >= 2) {
-          videoEl.play().catch(e => console.warn('Play en interacción fallido:', e));
+      if (heroContent) {
+        heroContent.style.opacity = '1';
+        heroContent.classList.add('visible');
+      }
+    }, { once: true });
+
+    // Reintentar en interacción del usuario - unificado para evitar duplicados
+    let interactionHandled = false;
+    const retryOnInteraction = (e: Event) => {
+      if (interactionHandled) return;
+      interactionHandled = true;
+
+      // Pequeño delay para evitar que touchstart y click se disparen ambos
+      setTimeout(() => {
+        if (videoEl.paused && videoEl.readyState >= 2 && !playAttempted) {
+          attemptPlay();
         }
         document.removeEventListener('touchstart', retryOnInteraction);
         document.removeEventListener('click', retryOnInteraction);
-      };
+      }, 50);
+    };
 
-      document.addEventListener('touchstart', retryOnInteraction, { once: true, passive: true });
-      document.addEventListener('click', retryOnInteraction, { once: true });
+    document.addEventListener('touchstart', retryOnInteraction, { once: true, passive: true });
+    document.addEventListener('click', retryOnInteraction, { once: true });
 
-      console.log('Modo móvil: autoplay activado (una vez)');
-      return;
-    }
-
-    // ============================================
-    // DESKTOP: Sprite Sheet con scroll
-    // ============================================
-
-    // Cargar manifest del sprite sheet
-    let spriteData: {
-      totalFrames: number;
-      frameWidth: number;
-      frameHeight: number;
-      framesPerRow: number;
-      sheets: Array<{
-        file: string;
-        startFrame: number;
-        endFrame: number;
-        frames: number;
-      }>;
-    } | null = null;
-
-    let currentSheetIndex = 0;
-    let framesLoaded = false;
-
-    try {
-      const response = await fetch('/sprites/manifest.json');
-      if (!response.ok) throw new Error('No se pudo cargar manifest.json');
-      spriteData = await response.json();
-
-      console.log('Sprite data cargado:', spriteData);
-
-      if (!spriteData) {
-        throw new Error('spriteData is null after loading');
-      }
-
-      // Precargar todas las imágenes del sprite
-      const loadPromises = spriteData.sheets.map(async (sheet, index) => {
-        return new Promise<HTMLImageElement>((resolve, reject) => {
-          const img = new Image();
-          img.src = `/sprites/${sheet.file}`;
-          img.onload = () => {
-            console.log(`Sprite sheet ${index + 1}/${spriteData!.sheets.length} cargado`);
-            resolve(img);
-          };
-          img.onerror = () => reject(new Error(`Error cargando ${sheet.file}`));
-        });
-      });
-
-      await Promise.all(loadPromises);
-      framesLoaded = true;
-
-      // Configurar la primera imagen
-      if (spriteData.sheets.length > 0) {
-        spriteEl.style.backgroundImage = `url('/sprites/${spriteData.sheets[0].file}')`;
-      }
-
-    } catch (error) {
-      console.error('Error cargando sprite sheets:', error);
-      console.log('Fallback: usar poster como imagen estática');
-      spriteEl.style.backgroundImage = `url('/video-poster.jpg')`;
-      spriteEl.style.backgroundSize = 'cover';
-      spriteEl.style.backgroundPosition = 'center';
-      return;
-    }
-
-    if (!spriteData || !framesLoaded) {
-      console.error('No se pudieron cargar los sprites');
-      return;
-    }
-
-    // Variables para scroll
-    let cachedHeroHeight = heroEl.offsetHeight;
-    let cachedWindowHeight = window.innerHeight;
-    let lastUpdateTime = 0;
-    const minUpdateInterval = 16; // ~60fps
-
-    function getFramePosition(frameIndex: number) {
-      if (!spriteData) return { x: 0, y: 0, sheet: 0 };
-
-      // Encontrar qué sheet contiene este frame
-      let sheetIndex = 0;
-      for (let i = 0; i < spriteData.sheets.length; i++) {
-        const sheet = spriteData.sheets[i];
-        if (frameIndex >= sheet.startFrame - 1 && frameIndex <= sheet.endFrame - 1) {
-          sheetIndex = i;
-          break;
-        }
-      }
-
-      const sheet = spriteData.sheets[sheetIndex];
-      const frameInSheet = frameIndex - (sheet.startFrame - 1);
-      const row = Math.floor(frameInSheet / spriteData.framesPerRow);
-      const col = frameInSheet % spriteData.framesPerRow;
-
-      return {
-        x: col * spriteData.frameWidth,
-        y: row * spriteData.frameHeight,
-        sheet: sheetIndex
-      };
-    }
-
-    function updateSprite(force = false) {
-      const now = performance.now();
-
-      if (!force && now - lastUpdateTime < minUpdateInterval) {
-        return;
-      }
-
-      if (!spriteData) return;
-
-      lastUpdateTime = now;
-
-      const heroRect = heroEl.getBoundingClientRect();
-      const heroTop = heroRect.top;
-
-      // Solo recalcular dimensiones cuando cambien significativamente
-      if (Math.abs(cachedHeroHeight - heroEl.offsetHeight) > 10) {
-        cachedHeroHeight = heroEl.offsetHeight;
-      }
-      if (Math.abs(cachedWindowHeight - window.innerHeight) > 10) {
-        cachedWindowHeight = window.innerHeight;
-      }
-
-      // Progreso del scroll
-      const scrolled = -heroTop;
-      const scrollable = Math.max(cachedHeroHeight - cachedWindowHeight, 1);
-
-      let progress = 0;
-      let scale = 1.2;
-
-      if (scrolled <= 0) {
-        progress = 0;
-        scale = 1.2;
-        if (heroContent) heroContent.classList.remove('visible');
-      } else if (scrolled >= scrollable) {
-        progress = 1;
-        scale = 1.0;
-        if (heroContent) heroContent.classList.add('visible');
-      } else {
-        progress = scrolled / scrollable;
-
-        // El video termina al 50% del scroll
-        const videoProgress = Math.min(progress / 0.5, 1);
-        scale = 1.2 - (videoProgress * 0.2);
-
-        if (progress > 0.6 && heroContent) {
-          heroContent.classList.add('visible');
-        } else if (heroContent) {
-          heroContent.classList.remove('visible');
-        }
-      }
-
-      // Calcular frame actual
-      const videoProgress = Math.min(progress / 0.5, 1);
-      const currentFrame = Math.floor(videoProgress * (spriteData.totalFrames - 1));
-      const clampedFrame = Math.max(0, Math.min(currentFrame, spriteData.totalFrames - 1));
-
-      // Obtener posición del frame
-      const pos = getFramePosition(clampedFrame);
-
-      // Cambiar imagen si es necesario
-      if (pos.sheet !== currentSheetIndex) {
-        currentSheetIndex = pos.sheet;
-        if (spriteEl) {
-          spriteEl.style.backgroundImage = `url('/sprites/${spriteData.sheets[pos.sheet].file}')`;
-        }
-      }
-
-      // Actualizar posición del background con escalado como object-fit: cover
-      if (!spriteEl) return;
-
-      const containerW = spriteEl.offsetWidth;
-      const containerH = spriteEl.offsetHeight;
-
-      const scaleX = containerW / spriteData.frameWidth;
-      const scaleY = containerH / spriteData.frameHeight;
-      const frameScale = Math.max(scaleX, scaleY);
-
-      const scaledFrameW = spriteData.frameWidth * frameScale;
-      const scaledFrameH = spriteData.frameHeight * frameScale;
-
-      const sheet = spriteData.sheets[pos.sheet];
-      const rows = Math.ceil(sheet.frames / spriteData.framesPerRow);
-      const totalSheetW = scaledFrameW * spriteData.framesPerRow;
-      const totalSheetH = scaledFrameH * rows;
-
-      const bgX = -(pos.x * frameScale) + (containerW - scaledFrameW) / 2;
-      const bgY = -(pos.y * frameScale) + (containerH - scaledFrameH) / 2;
-
-      if (!spriteEl) return;
-
-      spriteEl.style.backgroundSize = `${totalSheetW}px ${totalSheetH}px`;
-      spriteEl.style.backgroundPosition = `${bgX}px ${bgY}px`;
-
-      // Aplicar zoom
-      spriteEl.style.transform = `translate3d(-50%, -50%, 0) scale(${scale})`;
-    }
-
-    // Optimización: Intersection Observer
-    let observer: IntersectionObserver | null = null;
-    if ('IntersectionObserver' in window) {
-      observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && framesLoaded) {
-            updateSprite(true);
-          }
-        });
-      }, { threshold: 0.1 });
-
-      observer.observe(heroEl);
-    }
-
-    // Scroll listener optimizado
-    let ticking = false;
-    let lastScrollY = window.scrollY;
-    let lastScrollTime = 0;
-    const scrollDebounce = 32;
-
-    function handleScroll() {
-      const currentScrollY = window.scrollY;
-      const currentTime = Date.now();
-
-      if (Math.abs(currentScrollY - lastScrollY) < 2 ||
-          (currentTime - lastScrollTime) < scrollDebounce) {
-        return;
-      }
-
-      lastScrollY = currentScrollY;
-      lastScrollTime = currentTime;
-
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          updateSprite();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    // Resize handler
-    let resizeTimeout: NodeJS.Timeout | null = null;
-    let lastResizeTime = 0;
-
-    function handleResize() {
-      const now = Date.now();
-      if (now - lastResizeTime < 250) {
-        if (resizeTimeout) clearTimeout(resizeTimeout);
-      }
-
-      lastResizeTime = now;
-      if (resizeTimeout) clearTimeout(resizeTimeout);
-
-      resizeTimeout = setTimeout(() => {
-        cachedWindowHeight = window.innerHeight;
-        cachedHeroHeight = heroEl.offsetHeight;
-        updateSprite(true);
-      }, 250);
-    }
-
-    window.addEventListener('resize', handleResize);
-
-    // Cleanup
-    function cleanup() {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
-      if (observer) observer.disconnect();
-      if (resizeTimeout) clearTimeout(resizeTimeout);
-    }
-
-    window.addEventListener('beforeunload', cleanup);
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) updateSprite(true);
-    });
-
-    // Ejecutar una vez al inicio
-    setTimeout(() => updateSprite(true), 100);
+    console.log('Modo autoplay activado (una vez)');
   });
 </script>
 

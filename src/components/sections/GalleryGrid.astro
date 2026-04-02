@@ -40,11 +40,6 @@ const images = galleryData.data.images || [];
                   alt="Galería imagen"
                 />
               )}
-              <div class="gallery-grid__overlay">
-                <span class="gallery-grid__overlay-text">
-                  {image ? (lang === 'es' ? image.alt : (image.alt_en || image.alt)) : "Galería"}
-                </span>
-              </div>
             </div>
           </div>
         );
@@ -151,37 +146,6 @@ const images = galleryData.data.images || [];
   .gallery-grid__item:hover .gallery-grid__image {
     transform: scale(1.05);
     filter: brightness(1.05);
-  }
-
-  .gallery-grid__overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
-    padding: 3rem 1rem 1.5rem;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity var(--transition-base), transform var(--transition-base);
-    pointer-events: none;
-  }
-
-  .gallery-grid__item:hover .gallery-grid__overlay {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .gallery-grid__overlay-text {
-    color: white;
-    font-family: var(--font-serif);
-    font-size: var(--text-sm);
-    font-weight: 300;
-    text-align: center;
-    display: block;
-    line-height: 1.5;
-    letter-spacing: 0.5px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-    opacity: 0.95;
   }
 
   @media (min-width: 768px) {
