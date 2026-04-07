@@ -190,12 +190,12 @@ const openItem = Astro.url.searchParams.get('faq');
   // Accordion behavior: only one FAQ open at a time
   const detailsElements = document.querySelectorAll('.landing-faq__item');
 
-  detailsElements.forEach((detail) => {
+  detailsElements.forEach((detail: Element) => {
     detail.addEventListener('toggle', () => {
-      if (detail.open) {
-        detailsElements.forEach((otherDetail) => {
-          if (otherDetail !== detail && otherDetail.open) {
-            otherDetail.open = false;
+      if ((detail as HTMLDetailsElement).open) {
+        detailsElements.forEach((otherDetail: Element) => {
+          if (otherDetail !== detail && (otherDetail as HTMLDetailsElement).open) {
+            (otherDetail as HTMLDetailsElement).open = false;
           }
         });
       }
