@@ -1,0 +1,117 @@
+---
+import LandingTreatmentCard from '../ui/LandingTreatmentCard.astro';
+
+interface Props {
+  whatsappNumber?: string;
+}
+
+const { whatsappNumber } = Astro.props;
+
+const treatments = [
+  {
+    name: 'Full Body',
+    duration: '55 minutos',
+    price: '45€',
+    benefits: [
+      'Relajación total',
+      'Masaje de pies y cabeza',
+      'Renovación cuerpo y mente'
+    ],
+    image: '/images/services/masajes/full_body.jpeg',
+    whatsappNumber
+  },
+  {
+    name: 'Craneofacial',
+    duration: '40 minutos',
+    price: '32€',
+    benefits: [
+      'Libera tensión facial',
+      'Desconecta mentalmente',
+      'Sensación de renovación'
+    ],
+    image: '/images/services/masajes/craneofacial_masaje.jpeg',
+    isFeatured: true,
+    whatsappNumber
+  },
+  {
+    name: 'Descontracturante',
+    duration: '55 minutos',
+    price: '47€',
+    benefits: [
+      'Alivia contracturas',
+      'Libera nudos profundos',
+      'Mejora movilidad'
+    ],
+    image: '/images/services/masajes/descontracturante.png',
+    whatsappNumber
+  }
+];
+---
+
+<section class="landing-offer" id="oferta">
+  <div class="landing-offer__container">
+    <h2 class="landing-offer__title">Elige tu tratamiento</h2>
+    <p class="landing-offer__subtitle">
+      Tres opciones diseñadas para diferentes necesidades. Todas con resultados reales desde la primera sesión.
+    </p>
+
+    <div class="landing-offer__cards">
+      {treatments.map(treatment => (
+        <LandingTreatmentCard treatment={treatment} />
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .landing-offer {
+    background-color: var(--color-cream);
+    padding: var(--space-section-mobile) 0;
+  }
+
+  .landing-offer__container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-sm);
+    text-align: center;
+  }
+
+  .landing-offer__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-3xl);
+    font-weight: 400;
+    color: var(--color-text-dark);
+    margin-bottom: 1rem;
+  }
+
+  .landing-offer__subtitle {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 300;
+    color: var(--color-gray-soft);
+    max-width: 700px;
+    margin: 0 auto 3rem;
+    line-height: 1.6;
+  }
+
+  .landing-offer__cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  @media (min-width: 768px) {
+    .landing-offer {
+      padding: var(--space-section-desktop) 0;
+    }
+
+    .landing-offer__title {
+      font-size: var(--text-4xl);
+    }
+
+    .landing-offer__cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
