@@ -1,0 +1,125 @@
+---
+interface Treatment {
+  name: string;
+  duration: string;
+  price: string;
+  benefits: string[];
+  image?: string;
+  isFeatured?: boolean;
+  whatsappNumber?: string;
+}
+
+interface Props {
+  treatment: Treatment;
+}
+
+const { treatment } = Astro.props;
+const { name, duration, price, benefits, image, isFeatured, whatsappNumber } = treatment;
+
+const whatsappLink = whatsappNumber
+  ? `https://wa.me/${whatsappNumber.replace(/\s+/g, '')}?text=Hola, quiero reservar ${encodeURIComponent(name)}.`
+  : '#';
+---
+
+<article class={`treatment-card ${isFeatured ? 'treatment-card--featured' : ''}`}>
+  {image && (
+    <div class="treatment-card__image">
+      <img src={image} alt={name} loading="lazy" />
+    </div>
+  )}
+  <div class="treatment-card__content">
+    <h3 class="treatment-card__name">{name}</h3>
+    <p class="treatment-card__meta">{duration} • {price}</p>
+    <ul class="treatment-card__benefits">
+      {benefits.map(benefit => (
+        <li class="treatment-card__benefit">• {benefit}</li>
+      ))}
+    </ul>
+    <a href={whatsappLink} class="treatment-card__cta" target="_blank" rel="noopener noreferrer">
+      Reservar →
+    </a>
+  </div>
+</article>
+
+<style>
+  .treatment-card {
+    background-color: var(--color-white-warm);
+    border-radius: 8px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    border: 2px solid transparent;
+  }
+
+  .treatment-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .treatment-card--featured {
+    border-color: var(--color-gold);
+  }
+
+  .treatment-card__image {
+    height: 180px;
+    overflow: hidden;
+  }
+
+  .treatment-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .treatment-card__content {
+    padding: 1.5rem;
+  }
+
+  .treatment-card__name {
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    color: var(--color-text-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .treatment-card__meta {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: var(--color-gold);
+    margin-bottom: 1rem;
+  }
+
+  .treatment-card__benefits {
+    list-style: none;
+    margin-bottom: 1.5rem;
+  }
+
+  .treatment-card__benefit {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    color: var(--color-gray-soft);
+    padding: 0.25rem 0;
+  }
+
+  .treatment-card__cta {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-gold);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .treatment-card__cta:hover {
+    color: #b8943f;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .treatment-card:hover {
+      transform: none;
+    }
+  }
+</style>
