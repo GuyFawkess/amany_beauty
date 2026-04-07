@@ -1,0 +1,119 @@
+---
+---
+
+<section class="landing-solution" id="solucion">
+  <div class="landing-solution__container">
+    <h2 class="landing-solution__title">Un espacio diseñado para que realmente descanses</h2>
+    <p class="landing-solution__subtitle">
+      Nuestros masajes no son relajación superficial. Son tratamientos personalizados que trabajan cuerpo y mente para que salgas renovada.
+    </p>
+
+    <div class="landing-solution__benefits">
+      <div class="landing-solution__benefit">
+        <div class="landing-solution__icon">✓</div>
+        <h3 class="landing-solution__benefit-title">Personalizado</h3>
+        <p class="landing-solution__benefit-text">Adaptamos cada sesión a tus necesidades específicas</p>
+      </div>
+
+      <div class="landing-solution__benefit">
+        <div class="landing-solution__icon">✓</div>
+        <h3 class="landing-solution__benefit-title">Profesional</h3>
+        <p class="landing-solution__benefit-text">Terapeutas certificados con experiencia contrastada</p>
+      </div>
+
+      <div class="landing-solution__benefit">
+        <div class="landing-solution__icon">✓</div>
+        <h3 class="landing-solution__benefit-title">Resultados Reales</h3>
+        <p class="landing-solution__benefit-text">Notas la diferencia desde la primera sesión. Sin trucos, solo resultados</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .landing-solution {
+    background-color: var(--color-white-warm);
+    padding: var(--space-section-mobile) 0;
+  }
+
+  .landing-solution__container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-sm);
+    text-align: center;
+  }
+
+  .landing-solution__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-3xl);
+    font-weight: 400;
+    color: var(--color-text-dark);
+    margin-bottom: 1rem;
+  }
+
+  .landing-solution__subtitle {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 300;
+    color: var(--color-gray-soft);
+    max-width: 700px;
+    margin: 0 auto 3rem;
+    line-height: 1.6;
+  }
+
+  .landing-solution__benefits {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .landing-solution__benefit {
+    padding: 2rem;
+    background-color: var(--color-cream);
+    border-radius: 8px;
+  }
+
+  .landing-solution__icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-gold);
+    color: var(--color-white-warm);
+    border-radius: 50%;
+    font-size: var(--text-2xl);
+    font-weight: 500;
+  }
+
+  .landing-solution__benefit-title {
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    color: var(--color-text-dark);
+    margin-bottom: 0.75rem;
+  }
+
+  .landing-solution__benefit-text {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 300;
+    color: var(--color-gray-soft);
+    line-height: 1.5;
+  }
+
+  @media (min-width: 768px) {
+    .landing-solution {
+      padding: var(--space-section-desktop) 0;
+    }
+
+    .landing-solution__title {
+      font-size: var(--text-4xl);
+    }
+
+    .landing-solution__benefits {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
