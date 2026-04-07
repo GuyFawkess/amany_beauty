@@ -1,0 +1,370 @@
+/**
+ * AMANI BEAUTY - Landing Page Specific Styles
+ * Optimized for scroll animations and landing page interactions
+ */
+
+/* ================================
+   SMOOTH SCROLLING
+   ================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ================================
+   SCROLL ANIMATIONS
+   ================================ */
+
+/**
+ * Base state for animated elements
+ * Applied before intersection observer triggers
+ */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(30px);
+  will-change: opacity, transform;
+  transition-property: opacity, transform;
+  transition-duration: 0.6s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/**
+ * Animated state
+ * Applied when element enters viewport
+ */
+[data-animate].is-animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/**
+ * Animation delay variants
+ * Use data-animate-delay attribute: 1-5
+ */
+[data-animate-delay="1"] { transition-delay: 0.1s; }
+[data-animate-delay="2"] { transition-delay: 0.2s; }
+[data-animate-delay="3"] { transition-delay: 0.3s; }
+[data-animate-delay="4"] { transition-delay: 0.4s; }
+[data-animate-delay="5"] { transition-delay: 0.5s; }
+
+/**
+ * Animation direction variants
+ * Use data-animate-direction attribute: up, down, left, right
+ */
+[data-animate-direction="up"] {
+  transform: translateY(30px);
+}
+
+[data-animate-direction="down"] {
+  transform: translateY(-30px);
+}
+
+[data-animate-direction="left"] {
+  transform: translateX(30px);
+}
+
+[data-animate-direction="right"] {
+  transform: translateX(-30px);
+}
+
+/**
+ * Fade-only animation (no translate)
+ * Use data-animate-fade attribute
+ */
+[data-animate-fade] {
+  transform: none;
+}
+
+/* ================================
+   SECTION SPACING
+   ================================ */
+
+/**
+ * Section spacing for scroll targets
+ * Ensures content isn't hidden under fixed headers
+ */
+section[id] {
+  scroll-margin-top: calc(var(--nav-height) + 2rem);
+}
+
+/**
+ * Spacing between sections
+ */
+section + section {
+  margin-top: var(--space-section-mobile);
+}
+
+@media (min-width: 768px) {
+  section + section {
+    margin-top: var(--space-section-desktop);
+  }
+}
+
+/* ================================
+   FOCUS STYLES
+   ================================ */
+
+/**
+ * Accessible focus indicators for keyboard navigation
+ */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/**
+ * Remove focus outline for mouse users
+ */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ================================
+   REDUCED MOTION SUPPORT
+   ================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  /**
+   * Disable animations for users who prefer reduced motion
+   * Show content immediately without animations
+   */
+  [data-animate],
+  [data-animate="fade"],
+  [data-animate="slide"],
+  [data-animate="zoom"] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+
+  /**
+   * Skip animation delays
+   */
+  [data-animate-delay] {
+    transition-delay: 0s !important;
+  }
+}
+
+/* ================================
+   HIGH CONTRAST MODE SUPPORT
+   ================================ */
+
+@media (prefers-contrast: high) {
+  /**
+   * Enhance focus visibility in high contrast mode
+   */
+  a:focus-visible,
+  button:focus-visible {
+    outline-width: 3px;
+    outline-offset: 3px;
+  }
+
+  /**
+   * Ensure text remains readable
+   */
+  [data-animate] {
+    transition-duration: 0.3s;
+  }
+}
+
+/* ================================
+   PRINT STYLES
+   ================================ */
+
+@media print {
+  /**
+   * Disable animations for print
+   * Ensure all content is visible
+   */
+  [data-animate] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /**
+   * Remove scroll margins in print
+   */
+  section[id] {
+    scroll-margin-top: 0;
+  }
+
+  /**
+   * Ensure background colors print
+   */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+}
+
+/* ================================
+   UTILITY CLASSES
+   ================================ */
+
+/**
+ * Animation helpers
+ */
+.animate-on-load {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/**
+ * Staggered children animations
+ * Use for lists or grids where items should animate in sequence
+ */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.stagger-children.is-animated > *:nth-child(1) { transition-delay: 0.1s; }
+.stagger-children.is-animated > *:nth-child(2) { transition-delay: 0.2s; }
+.stagger-children.is-animated > *:nth-child(3) { transition-delay: 0.3s; }
+.stagger-children.is-animated > *:nth-child(4) { transition-delay: 0.4s; }
+.stagger-children.is-animated > *:nth-child(5) { transition-delay: 0.5s; }
+.stagger-children.is-animated > *:nth-child(6) { transition-delay: 0.6s; }
+
+.stagger-children.is-animated > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ================================
+   LANDING PAGE HERO
+   ================================ */
+
+/**
+ * Hero section optimizations
+ */
+.landing-hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.landing-hero [data-animate] {
+  transition-duration: 0.8s;
+}
+
+/* ================================
+   CTA BUTTONS
+   ================================ */
+
+/**
+ * Landing page CTA button styles
+ */
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2.5rem;
+  font-size: var(--text-lg);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-white-warm);
+  background-color: var(--color-gold);
+  border: 2px solid var(--color-gold);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.cta-button:hover {
+  background-color: transparent;
+  color: var(--color-gold);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.cta-button:hover::before {
+  left: 100%;
+}
+
+.cta-button:active {
+  transform: translateY(0);
+}
+
+/* ================================
+   RESPONSIVE ADJUSTMENTS
+   ================================ */
+
+@media (max-width: 767px) {
+  /**
+   * Reduce animation distances on mobile
+   */
+  [data-animate] {
+    transform: translateY(20px);
+  }
+
+  [data-animate-direction="up"] {
+    transform: translateY(20px);
+  }
+
+  [data-animate-direction="down"] {
+    transform: translateY(-20px);
+  }
+
+  [data-animate-direction="left"],
+  [data-animate-direction="right"] {
+    transform: translateX(20px);
+  }
+
+  /**
+   * Faster animations on mobile
+   */
+  [data-animate] {
+    transition-duration: 0.4s;
+  }
+
+  /**
+   * Reduced section spacing on mobile
+   */
+  section + section {
+    margin-top: var(--space-lg);
+  }
+}
