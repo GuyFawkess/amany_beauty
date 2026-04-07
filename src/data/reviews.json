@@ -1,0 +1,31 @@
+{
+  "rating": "4.9",
+  "totalReviews": 24,
+  "reviews": [
+    {
+      "id": 1,
+      "name": "María G.",
+      "date": "Hace 2 semanas",
+      "rating": 5,
+      "text": "Llevaba meses con estrés acumulado y dolor de espalda. Después de una sesión de Full Body, noté la diferencia desde el primer día. Increíble.",
+      "verified": true
+    },
+    {
+      "id": 2,
+      "name": "Laura P.",
+      "date": "Hace 1 mes",
+      "rating": 5,
+      "text": "El masaje craneofacial fue exactamente lo que necesitaba. Desconecté totalmente y salí renovada. 100% recomendado.",
+      "verified": true
+    },
+    {
+      "id": 3,
+      "name": "Carmen M.",
+      "date": "Hace 3 semanas",
+      "rating": 5,
+      "text": "Profesionalidad y buen ambiente. El masaje descontracturante me alivió el dolor de cuello que llevaba semanas.",
+      "verified": true
+    }
+  ],
+  "googleUrl": "https://www.google.com/maps/place/AMANI+BEAUTY"
+}
