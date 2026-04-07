@@ -1,0 +1,106 @@
+---
+---
+
+<section class="landing-problem" id="problema">
+  <div class="landing-problem__container">
+    <h2 class="landing-problem__title">¿Te sientes identificada?</h2>
+
+    <ul class="landing-problem__list">
+      <li class="landing-problem__item">
+        <span class="landing-problem__bullet">¿Dolor de espalda o cuello constante?</span>
+      </li>
+      <li class="landing-problem__item">
+        <span class="landing-problem__bullet">¿Estrés acumulado que no te deja desconectar?</span>
+      </li>
+      <li class="landing-problem__item">
+        <span class="landing-problem__bullet">¿Duermes mal por tensión muscular?</span>
+      </li>
+      <li class="landing-problem__item">
+        <span class="landing-problem__bullet">¿Sientes que no recargas ni en tu tiempo libre?</span>
+      </li>
+    </ul>
+
+    <p class="landing-problem__agitation">
+      Si no lo tratas, solo va a empeorar. El estrés y la tensión muscular se acumulan, afectando tu salud, tu estado de ánimo y tu calidad de vida.
+    </p>
+
+    <p class="landing-problem__transition">
+      No tienes que seguir así.
+    </p>
+  </div>
+</section>
+
+<style>
+  .landing-problem {
+    background-color: var(--color-cream);
+    padding: var(--space-section-mobile) 0;
+  }
+
+  .landing-problem__container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-sm);
+    text-align: center;
+  }
+
+  .landing-problem__title {
+    font-family: var(--font-serif);
+    font-size: var(--text-3xl);
+    font-weight: 400;
+    color: var(--color-text-dark);
+    margin-bottom: 2rem;
+  }
+
+  .landing-problem__list {
+    list-style: none;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+  }
+
+  .landing-problem__item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(44, 44, 44, 0.1);
+  }
+
+  .landing-problem__item:last-child {
+    border-bottom: none;
+  }
+
+  .landing-problem__bullet {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    color: var(--color-text-dark);
+  }
+
+  .landing-problem__agitation {
+    font-family: var(--font-sans);
+    font-size: var(--text-lg);
+    font-weight: 400;
+    color: var(--color-text-dark);
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+  }
+
+  .landing-problem__transition {
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    color: var(--color-gold);
+    font-style: italic;
+  }
+
+  @media (min-width: 768px) {
+    .landing-problem {
+      padding: var(--space-section-desktop) 0;
+    }
+
+    .landing-problem__title {
+      font-size: var(--text-4xl);
+    }
+
+    .landing-problem__agitation {
+      font-size: var(--text-xl);
+    }
+  }
+</style>
