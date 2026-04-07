@@ -19,10 +19,10 @@ const isReversed = index % 2 === 1;
 const servicePath = `/${lang}/${lang === 'es' ? 'servicios' : 'services'}/${lang === 'es' ? slug : slug_en}`;
 ---
 
-<article class={`service-card ${isReversed ? 'service-card--reversed' : ''}`}>
+<article class={`service-card ${isReversed ? 'service-card--reversed' : ''}`} transition:animate="fade">
   <div class="service-card__image">
     {coverImage ? (
-      <img src={coverImage} alt={lang === 'es' ? title : title_en} />
+      <img src={coverImage} alt={lang === 'es' ? title : title_en} transition:name={`service-cover-${slug}`} />
     ) : (
       <ImagePlaceholder aspectRatio="4/3" alt={lang === 'es' ? title : title_en} />
     )}

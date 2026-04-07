@@ -36,7 +36,7 @@ if (currentServiceSlug) {
 <nav class="nav" aria-label={t.a11y.mainNav}>
   <div class="nav__container">
     <!-- Logo -->
-    <a href={`/${lang}/`} class="nav__logo">
+    <a href={`/${lang}/`} class="nav__logo" transition:persist>
       <img src="/logo2.svg" alt="Amani Beauty" width="140" height="40" />
     </a>
 
@@ -74,7 +74,7 @@ if (currentServiceSlug) {
       <a href={`/${lang}/#contact`} class="nav__link">{t.nav.contact}</a>
 
       <!-- Language Toggle -->
-      <a href={langTogglePath} class="nav__lang-toggle" aria-label={t.a11y.languageToggle}>
+      <a href={langTogglePath} class="nav__lang-toggle" aria-label={t.a11y.languageToggle} transition:persist>
         {lang === 'es' ? 'EN' : 'ES'}
       </a>
     </div>

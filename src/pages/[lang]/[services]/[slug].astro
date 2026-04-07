@@ -50,12 +50,12 @@ const bodyContent = lang === 'es' ? service.data.body_es : service.data.body_en;
   currentServiceSlug={otherLangSlug}
 >
   <!-- Hero Section -->
-  <section class="service-hero">
+  <section class="service-hero" transition:animate="slide">
     <div class="service-hero__container">
-      <h1 class="service-hero__title">{title}</h1>
+      <h1 class="service-hero__title" transition:animate="fade">{title}</h1>
       <div class="service-hero__image">
         {service.data.coverImage ? (
-          <img src={service.data.coverImage} alt={title} />
+          <img src={service.data.coverImage} alt={title} transition:name={`service-cover-${service.data.slug_es}`} />
         ) : (
           <ImagePlaceholder aspectRatio="16/9" alt={title} />
         )}

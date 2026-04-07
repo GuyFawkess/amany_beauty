@@ -24,7 +24,7 @@ treatments:
     description_en: "Localised relaxing massage, choose between back or legs."
     duration: "30 min"
     price: "25€"
-    image: "/images/services/masajes/relajante_masaje.jpeg"
+    image: "/images/services/masajes/relajante_masaje.png"
 
   - name: "Descontracturante"
     name_en: "Deep Tissue Massage"
@@ -32,7 +32,7 @@ treatments:
     description_en: "Treatment focused on relieving muscle contractures and knots, releasing deep tension and improving mobility."
     duration: "55 min"
     price: "47€"
-    image: "/images/services/masajes/relajante_masaje.jpeg"
+    image: "/images/services/masajes/descontracturante.png"
 
   - name: "Localizado descontracturante"
     name_en: "Localised Deep Tissue"

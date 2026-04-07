@@ -32,7 +32,7 @@ treatments:
     description_en: "Our star treatment combines exfoliation and micro-stimulation for luminous, renewed skin."
     duration: ""
     price: "54€"
-    image: "/images/services/faciales/renovacion-total.jpeg"
+    image: "/images/services/faciales/renovacion-total.png"
 
   - name: "Pure Hydration"
     name_en: "Pure Hydration"
@@ -48,7 +48,7 @@ treatments:
     description_en: "Illuminates and revitalises dull skin, restoring a fresh and radiant appearance."
     duration: ""
     price: "35€"
-    image: "/images/services/faciales/pure-glow.jpeg"
+    image: "/images/services/faciales/pure-glow.png"
 
   - name: "Purificante detox"
     name_en: "Purifying Detox"
