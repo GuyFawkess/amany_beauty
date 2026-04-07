@@ -10,6 +10,7 @@ import LandingFAQ from '../components/landing/LandingFAQ.astro';
 import LandingCTA from '../components/landing/LandingCTA.astro';
 import LandingClose from '../components/landing/LandingClose.astro';
 import LandingFooter from '../components/landing/LandingFooter.astro';
+import LandingWhatsAppButton from '../components/landing/LandingWhatsAppButton.astro';
 
 // WhatsApp number - hardcoded
 const whatsappNumber = '34681803858';
@@ -94,6 +95,7 @@ const schemaOrg = {
       <LandingClose whatsappNumber={whatsappNumber} data-animate />
     </main>
     <LandingFooter />
+    <LandingWhatsAppButton whatsappNumber={whatsappNumber} />
     <script src="../scripts/landing.js"></script>
   </body>
 </html>
