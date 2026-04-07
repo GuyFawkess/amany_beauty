@@ -7,6 +7,9 @@ const lang = (Astro.params?.lang as 'es' | 'en') || 'es';
 const t = useTranslations(lang);
 
 const generalData = await getEntry('site', 'general');
+if (!generalData) {
+  throw new Error('General site data not found');
+}
 const { data } = generalData;
 ---
 

@@ -32,7 +32,7 @@ const whatsappLink = whatsappNumber
     <p class="treatment-card__meta">{duration} • {price}</p>
     <ul class="treatment-card__benefits">
       {benefits.map(benefit => (
-        <li class="treatment-card__benefit">• {benefit}</li>
+        <li class="treatment-card__benefit">{benefit}</li>
       ))}
     </ul>
     <a href={whatsappLink} class="treatment-card__cta" target="_blank" rel="noopener noreferrer">
@@ -94,13 +94,24 @@ const whatsappLink = whatsappNumber
   .treatment-card__benefits {
     list-style: none;
     margin-bottom: 1.5rem;
+    text-align: left;
   }
 
   .treatment-card__benefit {
     font-family: var(--font-sans);
     font-size: var(--text-sm);
     color: var(--color-gray-soft);
-    padding: 0.25rem 0;
+    padding: 0.5rem 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .treatment-card__benefit::before {
+    content: '✓';
+    color: var(--color-gold);
+    font-weight: bold;
+    flex-shrink: 0;
   }
 
   .treatment-card__cta {

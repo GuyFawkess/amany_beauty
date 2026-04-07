@@ -7,6 +7,9 @@ const lang = (Astro.params?.lang as 'es' | 'en') || 'es';
 const t = useTranslations(lang);
 
 const galleryData = await getEntry('gallery', 'gallery');
+if (!galleryData) {
+  throw new Error('Gallery data not found');
+}
 const images = galleryData.data.images || [];
 ---
 

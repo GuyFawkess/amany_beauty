@@ -1,4 +1,5 @@
 import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const treatmentSchema = z.object({
   name: z.string(),
@@ -11,7 +12,7 @@ const treatmentSchema = z.object({
 });
 
 const servicesCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/services' }),
   schema: z.object({
     title: z.string(),
     title_en: z.string(),
@@ -28,7 +29,7 @@ const servicesCollection = defineCollection({
 });
 
 const siteCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/site' }),
   schema: z.object({
     businessName: z.string().optional(),
     fullName: z.string().optional(),
@@ -43,7 +44,7 @@ const siteCollection = defineCollection({
 });
 
 const galleryCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/gallery' }),
   schema: z.object({
     images: z
       .array(

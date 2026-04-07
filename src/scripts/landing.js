@@ -6,7 +6,13 @@
 (function() {
   'use strict';
 
-  console.log('🎬 Landing animations initialized');
+  // Check if we're in development mode
+  const isDev = import.meta.env?.DEV ?? false;
+
+  const log = {
+    info: (...args) => { if (isDev) console.log('[Landing]', ...args); },
+    warn: (...args) => { if (isDev) console.warn('[Landing]', ...args); },
+  };
 
   // Configuration for the intersection observer
   const OBSERVER_CONFIG = {
@@ -14,6 +20,10 @@
     rootMargin: '0px 0px -50px 0px', // Trigger before element is fully visible
     threshold: 0.15 // Trigger when 15% visible
   };
+
+  // Store instances for cleanup
+  let scrollAnimator = null;
+  let smoothScroll = null;
 
   /**
    * Scroll Animation Observer
@@ -29,11 +39,11 @@
       const animatedElements = document.querySelectorAll('[data-animate]');
 
       if (animatedElements.length === 0) {
-        console.log('No animated elements found');
+        log.info('No animated elements found');
         return;
       }
 
-      console.log(`🎯 Found ${animatedElements.length} elements to animate`);
+      log.info(`Found ${animatedElements.length} elements to animate`);
 
       // Set up initial state for all animated elements
       animatedElements.forEach(el => {
@@ -76,12 +86,12 @@
     }
 
     /**
-     * Clean up observer
+     * Clean up observer to prevent memory leaks
      */
     destroy() {
       if (this.observer) {
         this.observer.disconnect();
-        console.log('🧹 Animation observer destroyed');
+        log.info('Animation observer cleaned up');
       }
     }
   }
@@ -92,6 +102,7 @@
    */
   class SmoothScroll {
     constructor() {
+      this.handlers = [];
       this.init();
     }
 
@@ -100,10 +111,12 @@
       const anchorLinks = document.querySelectorAll('a[href^="#"]');
 
       anchorLinks.forEach(link => {
-        link.addEventListener('click', this.handleClick.bind(this));
+        const handler = this.handleClick.bind(this);
+        link.addEventListener('click', handler);
+        this.handlers.push({ element: link, handler });
       });
 
-      console.log(`🔗 Smooth scroll enabled for ${anchorLinks.length} anchor links`);
+      log.info(`Smooth scroll enabled for ${anchorLinks.length} anchor links`);
     }
 
     handleClick(e) {
@@ -129,24 +142,58 @@
         targetElement.focus({ preventScroll: true });
       }
     }
+
+    /**
+     * Clean up event listeners to prevent memory leaks
+     */
+    destroy() {
+      this.handlers.forEach(({ element, handler }) => {
+        element.removeEventListener('click', handler);
+      });
+      this.handlers = [];
+      log.info('Smooth scroll handlers cleaned up');
+    }
+  }
+
+  /**
+   * Clean up all animations before page navigation
+   * This prevents memory leaks when using Astro's View Transitions
+   */
+  function cleanup() {
+    if (scrollAnimator) {
+      scrollAnimator.destroy();
+      scrollAnimator = null;
+    }
+    if (smoothScroll) {
+      smoothScroll.destroy();
+      smoothScroll = null;
+    }
   }
 
   // Initialize on DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      new ScrollAnimator();
-      new SmoothScroll();
+      scrollAnimator = new ScrollAnimator();
+      smoothScroll = new SmoothScroll();
     });
   } else {
     // DOM already ready
-    new ScrollAnimator();
-    new SmoothScroll();
+    scrollAnimator = new ScrollAnimator();
+    smoothScroll = new SmoothScroll();
   }
+
+  // Clean up before navigation (for Astro View Transitions)
+  document.addEventListener('astro:before-preparation', cleanup);
+  document.addEventListener('astro:after-swap', cleanup);
+
+  // Also clean up on page unload
+  window.addEventListener('beforeunload', cleanup);
 
   // Export for potential external use
   window.LandingAnimations = {
     ScrollAnimator,
-    SmoothScroll
+    SmoothScroll,
+    cleanup
   };
 
 })();

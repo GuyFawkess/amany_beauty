@@ -23,7 +23,15 @@ const faqs: FAQItem[] = [
   }
 ];
 
-const openItem = Astro.url.searchParams.get('faq');
+// Safely validate and parse the FAQ parameter
+const rawFaqParam = Astro.url.searchParams.get('faq');
+const openItem: number | null = (() => {
+  if (!rawFaqParam) return null;
+  // Validate it's a number and within valid range
+  const index = parseInt(rawFaqParam, 10);
+  if (isNaN(index) || index < 0 || index >= faqs.length) return null;
+  return index;
+})();
 ---
 
 <section class="landing-faq" id="faq">
@@ -36,8 +44,9 @@ const openItem = Astro.url.searchParams.get('faq');
     <div class="landing-faq__list">
       {faqs.map((faq, index) => (
         <details
-          class={`landing-faq__item ${openItem === String(index) ? 'landing-faq__item--open' : ''}`}
+          class={`landing-faq__item ${openItem === index ? 'landing-faq__item--open' : ''}`}
           id={`faq-${index}`}
+          open={openItem === index}
         >
           <summary class="landing-faq__question">
             <span>{faq.question}</span>

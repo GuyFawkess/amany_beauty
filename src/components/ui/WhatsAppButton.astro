@@ -1,8 +1,12 @@
 ---
 import { getEntry } from 'astro:content';
+import { sanitizeWhatsAppNumber } from '../../utils/sanitize';
 
 const generalData = await getEntry('site', 'general');
-const whatsapp = generalData.data.whatsapp;
+if (!generalData) {
+  throw new Error('General site data not found');
+}
+const whatsapp = sanitizeWhatsAppNumber(generalData.data.whatsapp);
 ---
 
 {whatsapp && (

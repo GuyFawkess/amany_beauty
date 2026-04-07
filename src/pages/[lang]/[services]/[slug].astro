@@ -5,6 +5,7 @@ import TreatmentCard from '../../../components/ui/TreatmentCard.astro';
 import WhatsAppButton from '../../../components/ui/WhatsAppButton.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { useTranslations } from '../../../i18n';
+import { sanitizeWhatsAppNumber } from '../../../utils/sanitize';
 
 export async function getStaticPaths() {
   const services = await getCollection('services');
@@ -33,7 +34,13 @@ const otherLangSlug = lang === 'es' ? service.data.slug_en : service.data.slug_e
 
 // Get site data
 const generalData = await getEntry('site', 'general');
+if (!generalData) {
+  throw new Error('General site data not found');
+}
 const { data: siteData } = generalData;
+
+// Sanitize WhatsApp number for safe URL usage
+const sanitizedWhatsapp = sanitizeWhatsAppNumber(siteData.whatsapp);
 
 // Get the title and other data in the correct language
 const title = lang === 'es' ? service.data.title : service.data.title_en;
@@ -105,7 +112,7 @@ const bodyContent = lang === 'es' ? service.data.body_es : service.data.body_en;
           : 'Ready for your wellness experience?'}
       </p>
       <a
-        href={`https://wa.me/${siteData.whatsapp?.replace(/\s+/g, '')}`}
+        href={sanitizedWhatsapp ? `https://wa.me/${sanitizedWhatsapp}` : '#'}
         class="service-cta__button"
         target="_blank"
         rel="noopener noreferrer"

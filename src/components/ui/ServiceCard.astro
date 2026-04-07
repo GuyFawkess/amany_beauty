@@ -22,7 +22,7 @@ const servicePath = `/${lang}/${lang === 'es' ? 'servicios' : 'services'}/${lang
 <article class={`service-card ${isReversed ? 'service-card--reversed' : ''}`} transition:animate="fade">
   <div class="service-card__image">
     {coverImage ? (
-      <img src={coverImage} alt={lang === 'es' ? title : title_en} transition:name={`service-cover-${slug}`} />
+      <img src={coverImage} alt={lang === 'es' ? title : title_en} loading="lazy" decoding="async" transition:name={`service-cover-${slug}`} />
     ) : (
       <ImagePlaceholder aspectRatio="4/3" alt={lang === 'es' ? title : title_en} />
     )}

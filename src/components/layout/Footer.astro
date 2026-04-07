@@ -1,12 +1,19 @@
 ---
 import { getLangFromUrl, useTranslations } from '../../i18n';
 import { getEntry } from 'astro:content';
+import { sanitizeWhatsAppNumber } from '../../utils/sanitize';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 const generalData = await getEntry('site', 'general');
+if (!generalData) {
+  throw new Error('General site data not found');
+}
 const { data } = generalData;
+
+// Sanitize WhatsApp number for safe URL usage
+const sanitizedWhatsapp = sanitizeWhatsAppNumber(data.whatsapp);
 ---
 
 <footer class="footer">
@@ -22,9 +29,9 @@ const { data } = generalData;
       <div class="footer__social">
         <p class="footer__social-label">{t.footer.followUs}</p>
         <div class="footer__social-links">
-          {data.whatsapp && (
+          {sanitizedWhatsapp && (
             <a
-              href={`https://wa.me/${data.whatsapp.replace(/\s+/g, '')}`}
+              href={`https://wa.me/${sanitizedWhatsapp}`}
               class="footer__social-link"
               target="_blank"
               rel="noopener noreferrer"

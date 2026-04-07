@@ -3,7 +3,7 @@ import '../../styles/global.css';
 import Nav from './Nav.astro';
 import Footer from './Footer.astro';
 import { getLangFromUrl } from '../../i18n';
-import { ViewTransitions } from 'astro:transitions';
+import { getEntry } from 'astro:content';
 
 interface Props {
   title: string;
@@ -17,6 +17,10 @@ const { title, description = 'Amani Beauty by María García - Tu espacio de bel
 const lang = getLangFromUrl(Astro.url);
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
+// Get site data for Schema.org
+const generalData = await getEntry('site', 'general');
+const whatsappNumber = generalData?.data?.whatsapp || '+34 000 000 000';
+
 // Schema.org LocalBusiness
 const schemaOrg = {
   "@context": "https://schema.org",
@@ -24,7 +28,7 @@ const schemaOrg = {
   "name": "Amani Beauty by María García",
   "description": description,
   "url": Astro.site,
-  "telephone": "+34 000 000 000",
+  "telephone": whatsappNumber,
   "address": {
     "@type": "PostalAddress",
     "addressCountry": "ES"
@@ -72,9 +76,6 @@ const schemaOrg = {
 
     <!-- Schema.org -->
     <script type="application/ld+json" is:inline set:html={JSON.stringify(schemaOrg)} />
-
-    <!-- Astro View Transitions -->
-    <ViewTransitions />
       </head>
   <body>
     <Nav currentLang={currentLang} currentServiceSlug={currentServiceSlug} />

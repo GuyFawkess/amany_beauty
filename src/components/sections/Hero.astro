@@ -4,6 +4,9 @@ import { getEntry } from 'astro:content';
 const lang = (Astro.params?.lang as 'es' | 'en') || 'es';
 
 const generalData = await getEntry('site', 'general');
+if (!generalData) {
+  throw new Error('General site data not found');
+}
 const { data } = generalData;
 ---
 
@@ -184,17 +187,26 @@ const { data } = generalData;
 </style>
 
 <script>
+  // Check if we're in development mode
+  const isDev = import.meta.env?.DEV ?? false;
+
+  const log = {
+    info: (...args: unknown[]) => { if (isDev) console.log('[Hero]', ...args); },
+    warn: (...args: unknown[]) => { if (isDev) console.warn('[Hero]', ...args); },
+    error: (...args: unknown[]) => console.error('[Hero]', ...args),
+  };
+
   document.addEventListener('DOMContentLoaded', () => {
     const hero = document.getElementById('scroll-hero') as HTMLElement | null;
     const heroContent = document.getElementById('heroContent') as HTMLElement | null;
     const videoEl = document.getElementById('heroVideo') as HTMLVideoElement | null;
 
     if (!hero || !videoEl) {
-      console.error('No se encontraron los elementos del hero');
+      log.error('No se encontraron los elementos del hero');
       return;
     }
 
-    console.log('Hero elementos encontrados');
+    log.info('Hero elementos encontrados');
 
     // Flag para evitar múltiples intentos de reproducción
     let playAttempted = false;
@@ -208,7 +220,7 @@ const { data } = generalData;
     const attemptPlay = (attempt = 0) => {
       // Si ya se está reproduciendo, no hacer nada
       if (!videoEl.paused && !videoEl.ended) {
-        console.log('Video ya reproduciéndose, omitiendo intento');
+        log.info('Video ya reproduciéndose, omitiendo intento');
         playAttempted = true;
         return;
       }
@@ -218,10 +230,10 @@ const { data } = generalData;
 
       videoEl.play()
         .then(() => {
-          console.log('Video reproduciéndose exitosamente');
+          log.info('Video reproduciéndose exitosamente');
         })
         .catch(err => {
-          console.error(`Error autoplay intento ${attempt}:`, err);
+          log.warn(`Error autoplay intento ${attempt}:`, err);
           playAttempted = false;
           if (attempt < 3) {
             setTimeout(() => {
@@ -277,7 +289,7 @@ const { data } = generalData;
 
     // Reintentar en interacción del usuario - unificado para evitar duplicados
     let interactionHandled = false;
-    const retryOnInteraction = (e: Event) => {
+    const retryOnInteraction = () => {
       if (interactionHandled) return;
       interactionHandled = true;
 
@@ -294,7 +306,7 @@ const { data } = generalData;
     document.addEventListener('touchstart', retryOnInteraction, { once: true, passive: true });
     document.addEventListener('click', retryOnInteraction, { once: true });
 
-    console.log('Modo autoplay activado (una vez)');
+    log.info('Modo autoplay activado (una vez)');
   });
 </script>
 
