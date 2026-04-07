@@ -1,0 +1,112 @@
+---
+interface Props {
+  whatsappNumber?: string;
+}
+
+const { whatsappNumber = '' } = Astro.props;
+
+const whatsappLink = whatsappNumber ? `https://wa.me/${whatsappNumber}` : '#';
+---
+
+<section class="close-section">
+  <div class="container">
+    <div class="close-content">
+      <h2 class="close-title">No tienes que seguir con estrés y tensión</h2>
+
+      <p class="benefit-text">
+        En solo 60 minutos, recupera tu equilibrio y bienestar con nuestros tratamientos
+        profesionales diseñados para liberar la tensión acumulada.
+      </p>
+
+      <a
+        href={whatsappLink}
+        class="cta-button"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Reservar mi sesión ahora
+      </a>
+
+      <p class="final-urgency">
+        Tu bienestar no puede esperar. ¡Reserva hoy y transforma tu mañana!
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .close-section {
+    background-color: var(--color-text-dark);
+    padding: 5rem 1rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .close-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .close-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .benefit-text {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #D4AF37 0%, #F4E4A6 50%, #D4AF37 100%);
+    color: var(--color-text-dark);
+    padding: 1.25rem 3rem;
+    border-radius: 50px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+  }
+
+  .final-urgency {
+    margin-top: 2.5rem;
+    font-size: 1.15rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .close-section {
+      padding: 3rem 1rem;
+    }
+
+    .cta-button {
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+    }
+
+    .benefit-text {
+      font-size: 1.1rem;
+    }
+
+    .final-urgency {
+      font-size: 1rem;
+    }
+  }
+</style>
