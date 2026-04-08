@@ -1,0 +1,249 @@
+/**
+ * AMANI BEAUTY - Button System
+ * Unified button styles across the application
+ */
+
+/* ================================
+   BUTTON BASE STYLES
+   ================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  text-decoration: none;
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ================================
+   BUTTON VARIANTS
+   ================================ */
+
+/**
+ * Primary Button - Gold background
+ * Use for main CTAs and primary actions
+ */
+.btn--primary {
+  background-color: var(--color-gold);
+  color: var(--color-white-warm);
+  border-color: var(--color-gold);
+  animation: pulse-gold 2s ease-in-out infinite;
+}
+
+.btn--primary:hover {
+  background-color: var(--color-gold-dark);
+  border-color: var(--color-gold-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(201, 169, 110, 0.4);
+  animation-play-state: paused;
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+}
+
+/**
+ * Shine effect on hover
+ */
+.btn--primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.btn--primary:hover::before {
+  left: 100%;
+}
+
+/**
+ * Secondary Button - Outline style
+ * Use for secondary actions
+ */
+.btn--secondary {
+  background-color: transparent;
+  color: var(--color-white-warm);
+  border-color: var(--color-white-warm);
+}
+
+.btn--secondary:hover {
+  background-color: var(--color-white-warm);
+  color: var(--color-text-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn--secondary:active {
+  transform: translateY(0);
+}
+
+/**
+ * Tertiary Button - Text only
+ * Use for tertiary actions and links
+ */
+.btn--tertiary {
+  background-color: transparent;
+  color: var(--color-gold);
+  border-color: transparent;
+  padding: 0.5rem 1rem;
+}
+
+.btn--tertiary:hover {
+  color: var(--color-gold-dark);
+  text-decoration: underline;
+}
+
+/**
+ * Dark Button - For use on light backgrounds
+ */
+.btn--dark {
+  background-color: var(--color-text-dark);
+  color: var(--color-white-warm);
+  border-color: var(--color-text-dark);
+}
+
+.btn--dark:hover {
+  background-color: var(--color-gold);
+  border-color: var(--color-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(201, 169, 110, 0.3);
+}
+
+/**
+ * Gradient Gold Button - Premium look
+ * Use for special CTAs and final conversion points
+ */
+.btn--gradient {
+  background: linear-gradient(135deg, #D4AF37 0%, #F4E4A6 50%, #D4AF37 100%);
+  color: var(--color-text-dark);
+  border: none;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.btn--gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+}
+
+/* ================================
+   BUTTON SIZES
+   ================================ */
+
+.btn--sm {
+  padding: 0.625rem 1.25rem;
+  font-size: var(--text-sm);
+}
+
+.btn--md {
+  padding: 0.875rem 1.75rem;
+  font-size: var(--text-base);
+}
+
+.btn--lg {
+  padding: 1.125rem 2.25rem;
+  font-size: var(--text-lg);
+}
+
+.btn--xl {
+  padding: 1.25rem 3rem;
+  font-size: var(--text-xl);
+}
+
+/* ================================
+   BUTTON WITH ICON
+   ================================ */
+
+.btn__icon {
+  width: 1.25em;
+  height: 1.25em;
+  flex-shrink: 0;
+}
+
+/* ================================
+   BUTTON FULL WIDTH
+   ================================ */
+
+.btn--full {
+  width: 100%;
+}
+
+/* ================================
+   ANIMATIONS
+   ================================ */
+
+@keyframes pulse-gold {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(201, 169, 110, 0.4);
+  }
+  50% {
+    box-shadow: 0 6px 20px rgba(201, 169, 110, 0.6);
+  }
+}
+
+/* ================================
+   REDUCED MOTION
+   ================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn--primary,
+  .btn--secondary,
+  .btn--tertiary,
+  .btn--dark,
+  .btn--gradient {
+    animation: none;
+    transition: none;
+  }
+
+  .btn:hover,
+  .btn--primary:hover,
+  .btn--secondary:hover,
+  .btn--dark:hover,
+  .btn--gradient:hover {
+    transform: none;
+  }
+}
+
+/* ================================
+   RESPONSIVE ADJUSTMENTS
+   ================================ */
+
+@media (max-width: 767px) {
+  .btn--lg {
+    padding: 1rem 2rem;
+    font-size: var(--text-base);
+  }
+
+  .btn--xl {
+    padding: 1rem 2rem;
+    font-size: var(--text-base);
+  }
+}

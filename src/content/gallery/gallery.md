@@ -3,7 +3,7 @@ images:
   - src: "/images/gallery/tratamiento-facial.jpeg"
     alt: "Tratamiento facial profesional"
     alt_en: "Professional facial treatment"
-  - src: "/images/gallery/sala-masajes.jpeg"
+  - src: "/images/gallery/sala-masajes.png"
     alt: "Sala de masajes"
     alt_en: "Massage room"
   - src: "/images/gallery/manicura-elegante.jpeg"
