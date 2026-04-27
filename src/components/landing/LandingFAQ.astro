@@ -1,27 +1,19 @@
 ---
+import { languages } from '../../i18n/index';
+
+interface Props {
+  lang?: 'es' | 'en';
+}
+
+const { lang = 'es' } = Astro.props;
+const t = languages[lang].landing.faq;
+
 interface FAQItem {
   question: string;
   answer: string;
 }
 
-const faqs: FAQItem[] = [
-  {
-    question: '¿Cuánto dura cada sesión de masaje?',
-    answer: 'Nuestros masajes tienen duraciones adaptadas a cada tratamiento. El Craneofacial es de 40 minutos, mientras que el Full Body y el Descontracturante son de 55 minutos. Cada sesión está diseñada para maximizar los resultados sin fatigar al cuerpo.'
-  },
-  {
-    question: '¿Necesito traer algo para mi sesión?',
-    answer: 'No es necesario que traigas nada. Todo el material necesario (toallas, aceites, ropa desechable) lo proporcionamos nosotros. Solo recomendamos que vengas con ropa cómoda y llega unos 5-10 minutos antes para relajarte antes de empezar.'
-  },
-  {
-    question: '¿Los masajes son adecuados para personas con piel sensible?',
-    answer: 'Sí, utilizamos aceites hiperalergénicos y productos naturales adecuados para todo tipo de piel. Antes de cada sesión, podemos hacer una pequeña prueba en tu antebrazo para asegurarnos de que no haya ninguna reacción. Informanos en la reserva si tienes alguna alergia conocida.'
-  },
-  {
-    question: '¿Puedo combinar diferentes tipos de masajes en una sesión?',
-    answer: 'Cada tratamiento está diseñado para ofrecer resultados específicos y óptimos en su duración establecida. Sin embargo, podemos personalizar ligeramente la sesión para enfocarnos en áreas que necesiten más atención. Consulta con nosotros al reservar y adaptaremos el tratamiento a tus necesidades.'
-  }
-];
+const faqs: FAQItem[] = t.items as FAQItem[];
 
 // Safely validate and parse the FAQ parameter
 const rawFaqParam = Astro.url.searchParams.get('faq');
@@ -36,9 +28,9 @@ const openItem: number | null = (() => {
 
 <section class="landing-faq" id="faq">
   <div class="landing-faq__container">
-    <h2 class="landing-faq__title">Preguntas Frecuentes</h2>
+    <h2 class="landing-faq__title">{t.title}</h2>
     <p class="landing-faq__subtitle">
-      Todo lo que necesitas saber antes de tu primera visita.
+      {t.subtitle}
     </p>
 
     <div class="landing-faq__list">

@@ -1,30 +1,38 @@
 ---
+import { languages } from '../../i18n/index';
+
+interface Props {
+  lang?: 'es' | 'en';
+}
+
+const { lang = 'es' } = Astro.props;
+const t = languages[lang].landing.solution;
 ---
 
 <section class="landing-solution" id="solucion">
   <div class="landing-solution__container">
-    <h2 class="landing-solution__title">Un espacio diseñado para que realmente descanses</h2>
+    <h2 class="landing-solution__title">{t.title}</h2>
     <p class="landing-solution__subtitle">
-      Nuestros masajes no son relajación superficial. Son tratamientos personalizados que trabajan cuerpo y mente para que salgas renovada.
+      {t.subtitle}
     </p>
 
     <div class="landing-solution__benefits">
       <div class="landing-solution__benefit">
         <div class="landing-solution__icon">✓</div>
-        <h3 class="landing-solution__benefit-title">Personalizado</h3>
-        <p class="landing-solution__benefit-text">Adaptamos cada sesión a tus necesidades específicas</p>
+        <h3 class="landing-solution__benefit-title">{t.benefit1Title}</h3>
+        <p class="landing-solution__benefit-text">{t.benefit1Text}</p>
       </div>
 
       <div class="landing-solution__benefit">
         <div class="landing-solution__icon">✓</div>
-        <h3 class="landing-solution__benefit-title">Profesional</h3>
-        <p class="landing-solution__benefit-text">Terapeutas certificados con experiencia contrastada</p>
+        <h3 class="landing-solution__benefit-title">{t.benefit2Title}</h3>
+        <p class="landing-solution__benefit-text">{t.benefit2Text}</p>
       </div>
 
       <div class="landing-solution__benefit">
         <div class="landing-solution__icon">✓</div>
-        <h3 class="landing-solution__benefit-title">Resultados Reales</h3>
-        <p class="landing-solution__benefit-text">Notas la diferencia desde la primera sesión. Sin trucos, solo resultados</p>
+        <h3 class="landing-solution__benefit-title">{t.benefit3Title}</h3>
+        <p class="landing-solution__benefit-text">{t.benefit3Text}</p>
       </div>
     </div>
   </div>

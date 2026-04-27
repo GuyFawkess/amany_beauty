@@ -13,10 +13,10 @@
   --color-white-warm: #FDFAF5;
   --color-gray-soft: #8A8A8A;
   --color-text-dark: #2C2C2C;
-  --color-primary: #3B82F6;
+  --color-primary: #C9A96E;
   --color-white: #FFFFFF;
   --color-gray-light: #E5E7EB;
-  --color-warm-white: #FDFAF5;
+
   --color-text-muted: #6B7280;
   --color-border: #E5E7EB;
 
@@ -82,6 +82,8 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: thin;
+  scrollbar-color: gray transparent;
 }
 
 /* Respect user preference for reduced motion */

@@ -21,7 +21,7 @@ const whatsappNumber = sanitizeWhatsAppNumber(generalData?.data?.whatsapp);
 // Page metadata
 const title = 'Therapeutic Massages in Tías, Lanzarote | Restore Your Energy and Calm';
 const description = 'Personalized therapeutic massages in Tías, Lanzarote. Full Body, Craniofacial and Deep Tissue. Restore your energy and calm in 60 minutes. Book via WhatsApp.';
-const image = '/images/services/masajes/full_body.jpeg';
+const image = '/images/services/masajes/full_body.webp';
 const canonicalURL = new URL('/en/landing/masajes', Astro.site);
 
 // Schema.org for massage service
@@ -88,17 +88,17 @@ const schemaOrg = {
   </head>
   <body>
     <main>
-      <LandingHero whatsappNumber={whatsappNumber} />
-      <LandingProblem data-animate />
-      <LandingSolution data-animate />
-      <LandingOffer whatsappNumber={whatsappNumber} data-animate />
-      <LandingTestimonials data-animate />
-      <LandingFAQ data-animate />
-      <LandingCTA whatsappNumber={whatsappNumber} data-animate />
-      <LandingClose whatsappNumber={whatsappNumber} data-animate />
+      <LandingHero whatsappNumber={whatsappNumber} lang="en" />
+      <LandingProblem data-animate lang="en" />
+      <LandingSolution data-animate lang="en" />
+      <LandingOffer whatsappNumber={whatsappNumber} data-animate lang="en" />
+      <LandingTestimonials data-animate lang="en" />
+      <LandingFAQ data-animate lang="en" />
+      <LandingCTA whatsappNumber={whatsappNumber} data-animate lang="en" />
+      <LandingClose whatsappNumber={whatsappNumber} data-animate lang="en" />
     </main>
     <LandingFooter />
-    <LandingWhatsAppButton whatsappNumber={whatsappNumber} />
+    <LandingWhatsAppButton whatsappNumber={whatsappNumber} lang="en" />
     <script src="../../../scripts/landing.js"></script>
   </body>
 </html>

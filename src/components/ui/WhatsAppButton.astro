@@ -11,7 +11,7 @@ const whatsapp = sanitizeWhatsAppNumber(generalData.data.whatsapp);
 
 {whatsapp && (
   <a
-    href={`https://wa.me/${whatsapp.replace(/\s+/g, '')}`}
+    href={`https://wa.me/${whatsapp}`}
     class="whatsapp-button"
     target="_blank"
     rel="noopener noreferrer"

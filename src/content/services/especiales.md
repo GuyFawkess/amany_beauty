@@ -5,7 +5,7 @@ slug_es: "especiales"
 slug_en: "specials"
 description: "Rituales y tratamientos especiales para una experiencia de bienestar completa, más allá de lo ordinario."
 description_en: "Special rituals and treatments for a complete wellness experience, beyond the ordinary."
-coverImage: "/images/services/tratamientos-especiales/tratamientos_especiales.jpeg"
+coverImage: "/images/services/tratamientos-especiales/tratamientos_especiales.webp"
 sortOrder: 5
 body_es: "Nuestros rituales y tratamientos especiales están pensados para quienes buscan una experiencia completa de bienestar. Déjate llevar y regálate un momento único."
 body_en: "Our special rituals and treatments are designed for those seeking a complete wellness experience. Let yourself go and give yourself a unique moment."
@@ -16,7 +16,7 @@ treatments:
     description_en: "Treatment with exfoliation and wrap that promotes toxin elimination, improves circulation and helps reduce the appearance of cellulite."
     duration: "50 min"
     price: "45€"
-    image: "/images/services/tratamientos-especiales/envoltura-anticelulitica.jpeg"
+    image: "/images/services/tratamientos-especiales/envoltura-anticelulitica.webp"
 
   - name: "Ritual renovador"
     name_en: "Renewing Ritual"
@@ -24,7 +24,7 @@ treatments:
     description_en: "Treatment with Himalayan salt exfoliation and citrus essences, accompanied by a relaxing massage that relieves tension and revitalises."
     duration: "70 min"
     price: "56€"
-    image: "/images/services/tratamientos-especiales/renovador.jpeg"
+    image: "/images/services/tratamientos-especiales/renovador.webp"
 
   - name: "Ritual de vinoterapia"
     name_en: "Vinotherapy Ritual"
@@ -32,7 +32,7 @@ treatments:
     description_en: "Vinotherapy ritual with exfoliation and full-body relaxing massage (including head) with Malsavia grape seed oil and virgin Macadamia oil."
     duration: "80 min"
     price: "59€"
-    image: "/images/services/tratamientos-especiales/vinoterapia.jpeg"
+    image: "/images/services/tratamientos-especiales/vinoterapia.webp"
 
   - name: "Ritual Lanzaloe"
     name_en: "Lanzaloe Ritual"
@@ -40,6 +40,6 @@ treatments:
     description_en: "Body exfoliation with full-body massage using aloe vera products, including a mini facial with natural aloe mask, freshly picked from the plant."
     duration: "90 min"
     price: "63€"
-    image: "/images/services/tratamientos-especiales/lanzaloe.jpeg"
+    image: "/images/services/tratamientos-especiales/lanzaloe.webp"
 
 ---

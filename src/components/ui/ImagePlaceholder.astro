@@ -2,13 +2,16 @@
 interface Props {
   aspectRatio?: string;
   alt?: string;
+  lang?: 'es' | 'en';
 }
 
-const { aspectRatio = '16/9', alt = 'Imagen próximamente' } = Astro.props;
+const { aspectRatio = '16/9', alt = 'Imagen próximamente', lang = 'es' } = Astro.props;
+
+const placeholderText = lang === 'es' ? '— imagen próximamente —' : '— image coming soon —';
 ---
 
 <div class="image-placeholder" style={`--aspect-ratio: ${aspectRatio};`} role="img" aria-label={alt}>
-  <span class="image-placeholder__text">— imagen próximamente —</span>
+  <span class="image-placeholder__text">{placeholderText}</span>
 </div>
 
 <style>

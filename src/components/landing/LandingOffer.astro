@@ -1,48 +1,39 @@
 ---
 import LandingTreatmentCard from '../ui/LandingTreatmentCard.astro';
+import { languages } from '../../i18n/index';
 
 interface Props {
   whatsappNumber?: string;
+  lang?: 'es' | 'en';
 }
 
-const { whatsappNumber } = Astro.props;
+const { whatsappNumber, lang = 'es' } = Astro.props;
+const t = languages[lang].landing.offer;
 
 const treatments = [
   {
-    name: 'Full Body',
-    duration: '55 minutos',
+    name: t.fullBody.name,
+    duration: t.fullBody.duration,
     price: '45€',
-    benefits: [
-      'Relajación total',
-      'Masaje de pies y cabeza',
-      'Renovación cuerpo y mente'
-    ],
-    image: '/images/services/masajes/full_body.jpeg',
+    benefits: t.fullBody.benefits,
+    image: '/images/services/masajes/full_body.webp',
     whatsappNumber
   },
   {
-    name: 'Craneofacial',
-    duration: '40 minutos',
+    name: t.craneofacial.name,
+    duration: t.craneofacial.duration,
     price: '32€',
-    benefits: [
-      'Libera tensión facial',
-      'Desconecta mentalmente',
-      'Sensación de renovación'
-    ],
-    image: '/images/services/masajes/craneofacial_masaje.jpeg',
+    benefits: t.craneofacial.benefits,
+    image: '/images/services/masajes/craneofacial_masaje.webp',
     isFeatured: true,
     whatsappNumber
   },
   {
-    name: 'Descontracturante',
-    duration: '55 minutos',
+    name: t.descontracturante.name,
+    duration: t.descontracturante.duration,
     price: '47€',
-    benefits: [
-      'Alivia contracturas',
-      'Libera nudos profundos',
-      'Mejora movilidad'
-    ],
-    image: '/images/services/masajes/descontracturante.png',
+    benefits: t.descontracturante.benefits,
+    image: '/images/services/masajes/descontracturante.webp',
     whatsappNumber
   }
 ];
@@ -50,14 +41,14 @@ const treatments = [
 
 <section class="landing-offer" id="oferta">
   <div class="landing-offer__container">
-    <h2 class="landing-offer__title">Elige tu tratamiento</h2>
+    <h2 class="landing-offer__title">{t.title}</h2>
     <p class="landing-offer__subtitle">
-      Tres opciones diseñadas para diferentes necesidades. Todas con resultados reales desde la primera sesión.
+      {t.subtitle}
     </p>
 
     <div class="landing-offer__cards">
       {treatments.map(treatment => (
-        <LandingTreatmentCard treatment={treatment} />
+        <LandingTreatmentCard treatment={treatment} lang={lang} />
       ))}
     </div>
   </div>

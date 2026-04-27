@@ -1,17 +1,23 @@
 ---
-import { generalData } from '@/data/generalData';
+import { getEntry } from 'astro:content';
+
+const generalData = await getEntry('site', 'general');
+if (!generalData) {
+  throw new Error('General site data not found');
+}
+const { data } = generalData;
 ---
 
 <footer class="landing-footer">
   <div class="container">
     <div class="footer-content">
       <p class="copyright">
-        © 2025 Amani Beauty • Tías, Lanzarote
+        &copy; {new Date().getFullYear()} {data.businessName} &bull; Tías, Lanzarote
       </p>
 
       <div class="social-links">
         <a
-          href={generalData.social.instagram}
+          href={`https://instagram.com/${(data.instagram || '').replace('@', '')}`}
           class="social-link"
           target="_blank"
           rel="noopener noreferrer"
@@ -25,7 +31,7 @@ import { generalData } from '@/data/generalData';
         </a>
 
         <a
-          href={generalData.social.googleMaps}
+          href={data.location || 'https://maps.google.com/?q=Tías,Lanzarote'}
           class="social-link"
           target="_blank"
           rel="noopener noreferrer"

@@ -1,16 +1,20 @@
 ---
+import { languages } from '../../i18n/index';
+
 interface Props {
   whatsappNumber?: string;
+  lang?: 'es' | 'en';
 }
 
-const { whatsappNumber = '' } = Astro.props;
+const { whatsappNumber = '', lang = 'es' } = Astro.props;
+const t = languages[lang].landing.hero;
 
-const heroTitle = "Recupera tu energía y calma mental en 60 minutos";
-const heroSubtitle = "Masajes terapéuticos personalizados para liberar el estrés acumulado y recuperar tu bienestar";
-const primaryCTA = "Reservar por WhatsApp";
-const secondaryCTA = "Ver disponibilidad";
+const heroTitle = t.title;
+const heroSubtitle = t.subtitle;
+const primaryCTA = t.primaryCTA;
+const secondaryCTA = t.secondaryCTA;
 const whatsappLink = whatsappNumber
-  ? `https://wa.me/${whatsappNumber.replace(/\s+/g, '')}?text=Hola, quiero reservar un masaje.`
+  ? `https://wa.me/${whatsappNumber.replace(/\s+/g, '')}?text=${encodeURIComponent(t.whatsappMessage)}`
   : '#';
 ---
 
@@ -21,7 +25,7 @@ const whatsappLink = whatsappNumber
       <svg class="landing-hero__pin" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
       </svg>
-      Tías, Lanzarote
+      {t.location}
     </span>
     <h1 class="landing-hero__title">{heroTitle}</h1>
     <p class="landing-hero__subtitle">{heroSubtitle}</p>
@@ -53,7 +57,7 @@ const whatsappLink = whatsappNumber
   .landing-hero__background {
     position: absolute;
     inset: 0;
-    background-image: url('/images/services/masajes/full_body.jpeg');
+    background-image: url('/images/services/masajes/full_body.webp');
     background-size: cover;
     background-position: center;
     filter: brightness(0.4);

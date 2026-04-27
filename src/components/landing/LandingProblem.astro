@@ -1,9 +1,17 @@
 ---
+import { languages } from '../../i18n/index';
+
+interface Props {
+  lang?: 'es' | 'en';
+}
+
+const { lang = 'es' } = Astro.props;
+const t = languages[lang].landing.problem;
 ---
 
 <section class="landing-problem" id="problema">
   <div class="landing-problem__container">
-    <h2 class="landing-problem__title">¿Te sientes identificada?</h2>
+    <h2 class="landing-problem__title">{t.title}</h2>
 
     <div class="landing-problem__list">
       <div class="landing-problem__item" data-animate-delay="1">
@@ -15,7 +23,7 @@
             <circle cx="12" cy="19" r="2"/>
           </svg>
         </div>
-        <span class="landing-problem__bullet">¿Dolor de espalda o cuello constante?</span>
+        <span class="landing-problem__bullet">{t.bullet1}</span>
       </div>
 
       <div class="landing-problem__item" data-animate-delay="2">
@@ -26,7 +34,7 @@
             <path d="M2 12l10 5 10-5"/>
           </svg>
         </div>
-        <span class="landing-problem__bullet">¿Estrés acumulado que no te deja desconectar?</span>
+        <span class="landing-problem__bullet">{t.bullet2}</span>
       </div>
 
       <div class="landing-problem__item" data-animate-delay="3">
@@ -35,7 +43,7 @@
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
           </svg>
         </div>
-        <span class="landing-problem__bullet">¿Duermes mal por tensión muscular?</span>
+        <span class="landing-problem__bullet">{t.bullet3}</span>
       </div>
 
       <div class="landing-problem__item" data-animate-delay="4">
@@ -48,16 +56,16 @@
             <path d="M13 10v4"/>
           </svg>
         </div>
-        <span class="landing-problem__bullet">¿Sientes que no recargas ni en tu tiempo libre?</span>
+        <span class="landing-problem__bullet">{t.bullet4}</span>
       </div>
     </div>
 
     <p class="landing-problem__agitation">
-      Si no lo tratas, solo va a empeorar. El estrés y la tensión muscular se acumulan, afectando tu salud, tu estado de ánimo y tu calidad de vida.
+      {t.agitation}
     </p>
 
     <p class="landing-problem__transition">
-      No tienes que seguir así.
+      {t.transition}
     </p>
   </div>
 </section>

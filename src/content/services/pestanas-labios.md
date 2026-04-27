@@ -5,7 +5,7 @@ slug_es: "pestanas-labios"
 slug_en: "eyelashes-lips"
 description: "Servicios especializados para realzar la belleza de tus pestañas y labios con tratamientos innovadores y duraderos."
 description_en: "Specialised services to enhance the beauty of your eyelashes and lips with innovative and long-lasting treatments."
-coverImage: "/images/services/pestañas-labios/pestanas-labios-portada2.png"
+coverImage: "/images/services/pestañas-labios/pestanas-labios-portada2.webp"
 sortOrder: 4
 body_es: "Resalta tu mirada y realza tus labios con nuestros tratamientos especializados. Combinamos técnicas innovadoras con productos de calidad para lograr resultados naturales y duraderos."
 body_en: "Highlight your gaze and enhance your lips with our specialised treatments. We combine innovative techniques with quality products to achieve natural and long-lasting results."
@@ -16,7 +16,7 @@ treatments:
     description_en: "Lifts and curls your natural lashes, adding greater volume."
     duration: ""
     price: "30€"
-    image: "/images/services/pestañas-labios/lifting.jpeg"
+    image: "/images/services/pestañas-labios/lifting.webp"
 
   - name: "Hydralips"
     name_en: "Hydralips"
@@ -24,7 +24,7 @@ treatments:
     description_en: "Deep hydration with hyaluronic acid, combined with dermapen. Ideal for very dehydrated lips."
     duration: ""
     price: "18€"
-    image: "/images/services/pestañas-labios/hydralips.png"
+    image: "/images/services/pestañas-labios/hydralips.webp"
 
   - name: "Babylips"
     name_en: "Babylips"
@@ -32,5 +32,5 @@ treatments:
     description_en: "Deep hydration with hyaluronic acid and pigments. Ideal for special occasions, to add a touch of colour and fullness to the lips."
     duration: ""
     price: "23€"
-    image: "/images/services/pestañas-labios/babylips.png"
+    image: "/images/services/pestañas-labios/babylips.webp"
 ---

@@ -1,9 +1,13 @@
 ---
+import { languages } from '../../i18n/index';
+
 interface Props {
   whatsappNumber?: string;
+  lang?: 'es' | 'en';
 }
 
-const { whatsappNumber = '' } = Astro.props;
+const { whatsappNumber = '', lang = 'es' } = Astro.props;
+const t = languages[lang].landing.cta;
 
 const whatsappLink = whatsappNumber ? `https://wa.me/${whatsappNumber}` : '#';
 ---
@@ -11,10 +15,10 @@ const whatsappLink = whatsappNumber ? `https://wa.me/${whatsappNumber}` : '#';
 <section id="reservar" class="cta-section">
   <div class="container">
     <div class="cta-content">
-      <h2 class="cta-title">Reserva tu momento de descanso hoy</h2>
+      <h2 class="cta-title">{t.title}</h2>
 
       <p class="urgency-text">
-        ¡Quedan pocas citas disponibles esta semana! No dejes pasar tu oportunidad de relajarte.
+        {t.urgency}
       </p>
 
       <a
@@ -23,30 +27,30 @@ const whatsappLink = whatsappNumber ? `https://wa.me/${whatsappNumber}` : '#';
         target="_blank"
         rel="noopener noreferrer"
       >
-        Reservar por WhatsApp
+        {t.button}
       </a>
 
       <ul class="features-list">
         <li class="feature-item">
           <span class="feature-icon">✓</span>
-          <span>Respuesta inmediata</span>
+          <span>{t.feature1}</span>
         </li>
         <li class="feature-item">
           <span class="feature-icon">✓</span>
-          <span>Sin compromiso</span>
+          <span>{t.feature2}</span>
         </li>
         <li class="feature-item">
           <span class="feature-icon">✓</span>
-          <span>Confirmación en el momento</span>
+          <span>{t.feature3}</span>
         </li>
       </ul>
 
       <div class="location-info">
         <p class="location-text">
-          <strong>Ubicación:</strong> Tías, Lanzarote
+          <strong>{t.locationLabel}</strong> {t.location}
         </p>
         <p class="parking-info">
-          Parking gratuito disponible en la zona
+          {t.parking}
         </p>
       </div>
     </div>

@@ -1,4 +1,6 @@
 ---
+import { languages } from '../../i18n/index';
+
 interface Treatment {
   name: string;
   duration: string;
@@ -11,13 +13,15 @@ interface Treatment {
 
 interface Props {
   treatment: Treatment;
+  lang?: 'es' | 'en';
 }
 
-const { treatment } = Astro.props;
+const { treatment, lang = 'es' } = Astro.props;
 const { name, duration, price, benefits, image, isFeatured, whatsappNumber } = treatment;
+const t = languages[lang].landing.offer;
 
 const whatsappLink = whatsappNumber
-  ? `https://wa.me/${whatsappNumber.replace(/\s+/g, '')}?text=Hola, quiero reservar ${encodeURIComponent(name)}.`
+  ? `https://wa.me/${whatsappNumber.replace(/\s+/g, '')}?text=${encodeURIComponent(t.whatsappPrefix + ' ' + name + '.')}`
   : '#';
 ---
 
@@ -36,7 +40,7 @@ const whatsappLink = whatsappNumber
       ))}
     </ul>
     <a href={whatsappLink} class="treatment-card__cta" target="_blank" rel="noopener noreferrer">
-      Reservar →
+      {t.bookCta}
     </a>
   </div>
 </article>

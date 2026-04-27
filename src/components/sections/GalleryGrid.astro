@@ -24,8 +24,8 @@ const images = galleryData.data.images || [];
     </p>
 
     <div class="gallery-grid">
-      {/* Render 8 placeholders, or actual images if they exist */}
-      {Array.from({ length: 8 }).map((_, index) => {
+      {/* Render gallery images from content collection */}
+      {Array.from({ length: images.length }).map((_, index) => {
         const image = images[index];
         return (
           <div class="gallery-grid__item">

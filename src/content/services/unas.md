@@ -5,7 +5,7 @@ slug_es: "unas"
 slug_en: "nails"
 description: "Manicura y pedicura profesional con acabados duraderos y un cuidado exquisito para tus manos y pies."
 description_en: "Professional manicure and pedicure with long-lasting finishes and exquisite care for your hands and feet."
-coverImage: "/images/services/pericura/manicura.png"
+coverImage: "/images/services/pericura/manicura.webp"
 sortOrder: 3
 body_es: "Unas manos y pies cuidados son tu mejor accesorio. En Amani Beauty trabajamos con productos de primera calidad para garantizar un acabado perfecto y una experiencia agradable en cada visita."
 body_en: "Well-cared-for hands and feet are your best accessory. At Amani Beauty we work with top-quality products to guarantee a perfect finish and a pleasant experience on every visit."
@@ -16,7 +16,7 @@ treatments:
     description_en: "Filing and cuticle care, semi-permanent nail polish in a single colour."
     duration: ""
     price: "21€"
-    image: "/images/services/pericura/semi-basica-unas.jpeg"
+    image: "/images/services/pericura/semi-basica-unas.webp"
 
   - name: "Manicura semipermanente con refuerzo"
     name_en: "Semi-permanent Manicure with Reinforcement"
@@ -24,7 +24,7 @@ treatments:
     description_en: "Strengthens the natural nail with a reinforcement layer in gel or rubber base."
     duration: ""
     price: "25€"
-    image: "/images/services/pericura/semi-refuerzo-unas.jpeg"
+    image: "/images/services/pericura/semi-refuerzo-unas.webp"
 
   - name: "Manicura soft gel"
     name_en: "Soft Gel Manicure"
@@ -32,7 +32,7 @@ treatments:
     description_en: "Manicure with soft gel nail extensions, a light and flexible system that lengthens the nail with a natural and elegant finish."
     duration: ""
     price: "28€"
-    image: "/images/services/pericura/soft-gel-unas.jpeg"
+    image: "/images/services/pericura/soft-gel-unas.webp"
 
   - name: "Pedicura semi básica"
     name_en: "Basic Semi Pedicure"
@@ -40,7 +40,7 @@ treatments:
     description_en: "Simply file and paint nails with semi-permanent polish."
     duration: ""
     price: "22€"
-    image: "/images/services/pericura/pedicura-basica-unas.jpeg"
+    image: "/images/services/pericura/pedicura-basica-unas.webp"
 
   - name: "Pedicura SPA semi"
     name_en: "SPA Semi Pedicure"
@@ -48,5 +48,5 @@ treatments:
     description_en: "Exfoliation, cuticle treatment, callus removal and deep hydration plus semi-permanent polish."
     duration: ""
     price: "26€"
-    image: "/images/services/pericura/pedicura-spa-unas.jpeg"
+    image: "/images/services/pericura/pedicura-spa-unas.webp"
 ---
