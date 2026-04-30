@@ -11,5 +11,5 @@ COPY --from=builder /app/dist ./dist
 COPY serve.json .
 RUN npm install -g serve
 
-EXPOSE 3000
-CMD ["serve", "dist", "-s", "-l", "3000", "--no-clipboard"]
+EXPOSE 80
+CMD ["serve", "dist", "-s", "-l", "80", "--no-clipboard"]
