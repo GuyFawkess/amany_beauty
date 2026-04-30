@@ -1,29 +1,29 @@
 {
   "rating": "4.9",
-  "totalReviews": 24,
+  "totalReviews": 25,
   "reviews": [
     {
       "id": 1,
-      "name": "María G.",
-      "date": "Hace 2 semanas",
+      "name": "Elsa Llana Machuca",
+      "date": "Hace 3 meses",
       "rating": 5,
-      "text": "Llevaba meses con estrés acumulado y dolor de espalda. Después de una sesión de Full Body, noté la diferencia desde el primer día. Increíble.",
+      "text": "Primera experiencia con María ¡y ha sido maravillosa! Una atención al detalle increíble, cuidadosa, todo lo hacia con un cariño y una profesionalidad espectacular. ¡Sin duda voy a repetir!",
       "verified": true
     },
     {
       "id": 2,
-      "name": "Laura P.",
-      "date": "Hace 1 mes",
+      "name": "Carolina Latorre",
+      "date": "Hace 5 meses",
       "rating": 5,
-      "text": "El masaje craneofacial fue exactamente lo que necesitaba. Desconecté totalmente y salí renovada. 100% recomendado.",
+      "text": "Me súper encanta este sitio!!! Maria es una profesional maravillosa con unas manos increíbles. Los masajes son de lujo, me transportan a todo lugar. La relajación que produce me renueva totalmente!! La recomiendo 100%",
       "verified": true
     },
     {
       "id": 3,
-      "name": "Carmen M.",
-      "date": "Hace 3 semanas",
+      "name": "Jasmine Cooke",
+      "date": "Hace 7 meses",
       "rating": 5,
-      "text": "Profesionalidad y buen ambiente. El masaje descontracturante me alivió el dolor de cuello que llevaba semanas.",
+      "text": "En un principio no estaba segura de si elegir entre un masaje relajante o descontracturante, y María muy amablemente me ofreció la opción de un masaje relajante con mayor intensidad. La atención fue excelente y el masaje muy agradable, exactamente lo que necesitaba. Sin duda, un lugar muy recomendable.",
       "verified": true
     }
   ],

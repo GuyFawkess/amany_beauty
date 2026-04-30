@@ -3,12 +3,17 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // Use Vercel's automatic URL or localhost for development
-  site: process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:4321',
+  site: 'https://amanibeauty.es',
   integrations: [
-    sitemap(),
+    sitemap({
+      i18n: {
+        defaultLocale: 'es',
+        locales: {
+          es: 'es-ES',
+          en: 'en-US',
+        },
+      },
+    }),
   ],
   i18n: {
     defaultLocale: 'es',
