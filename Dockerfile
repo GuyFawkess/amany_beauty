@@ -12,4 +12,4 @@ COPY serve.json .
 RUN npm install -g serve
 
 EXPOSE 80
-CMD ["serve", "dist", "-s", "-l", "80", "--no-clipboard"]
+CMD ["serve", "dist", "-l", "80", "--no-clipboard"]
