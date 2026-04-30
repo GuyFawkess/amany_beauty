@@ -51,10 +51,10 @@ const schemaOrg = {
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
 
-    <!-- Hreflang -->
-    <link rel="alternate" hreflang="es" href={Astro.site + 'es/'} />
+    <!-- Hreflang: Spanish at root, English with /en prefix -->
+    <link rel="alternate" hreflang="es" href={Astro.site} />
     <link rel="alternate" hreflang="en" href={Astro.site + 'en/'} />
-    <link rel="alternate" hreflang="x-default" href={Astro.site + 'es/'} />
+    <link rel="alternate" hreflang="x-default" href={Astro.site} />
 
     <!-- Robots -->
     <meta name="robots" content="index, follow" />

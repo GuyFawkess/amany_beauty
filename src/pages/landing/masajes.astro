@@ -1,18 +1,18 @@
 ---
-import '../../../styles/landing.css';
-import '../../../styles/global.css';
+import '../../styles/landing.css';
+import '../../styles/global.css';
 import { getEntry } from 'astro:content';
-import { sanitizeWhatsAppNumber } from '../../../utils/sanitize';
-import LandingHero from '../../../components/landing/LandingHero.astro';
-import LandingProblem from '../../../components/landing/LandingProblem.astro';
-import LandingSolution from '../../../components/landing/LandingSolution.astro';
-import LandingOffer from '../../../components/landing/LandingOffer.astro';
-import LandingTestimonials from '../../../components/landing/LandingTestimonials.astro';
-import LandingFAQ from '../../../components/landing/LandingFAQ.astro';
-import LandingCTA from '../../../components/landing/LandingCTA.astro';
-import LandingClose from '../../../components/landing/LandingClose.astro';
-import LandingFooter from '../../../components/landing/LandingFooter.astro';
-import LandingWhatsAppButton from '../../../components/landing/LandingWhatsAppButton.astro';
+import { sanitizeWhatsAppNumber } from '../../utils/sanitize';
+import LandingHero from '../../components/landing/LandingHero.astro';
+import LandingProblem from '../../components/landing/LandingProblem.astro';
+import LandingSolution from '../../components/landing/LandingSolution.astro';
+import LandingOffer from '../../components/landing/LandingOffer.astro';
+import LandingTestimonials from '../../components/landing/LandingTestimonials.astro';
+import LandingFAQ from '../../components/landing/LandingFAQ.astro';
+import LandingCTA from '../../components/landing/LandingCTA.astro';
+import LandingClose from '../../components/landing/LandingClose.astro';
+import LandingFooter from '../../components/landing/LandingFooter.astro';
+import LandingWhatsAppButton from '../../components/landing/LandingWhatsAppButton.astro';
 
 // Get site data for WhatsApp number
 const generalData = await getEntry('site', 'general');
@@ -22,7 +22,7 @@ const whatsappNumber = sanitizeWhatsAppNumber(generalData?.data?.whatsapp);
 const title = 'Masajes Terapéuticos en Tías, Lanzarote | Recupera tu Energía y Calma Mental';
 const description = 'Masajes terapéuticos personalizados en Tías, Lanzarote. Full Body, Craneofacial y Descontracturante. Recupera tu energía y calma mental en 60 minutos. Reserva por WhatsApp.';
 const image = '/images/services/masajes/full_body.webp';
-const canonicalURL = new URL('/es/landing/masajes', Astro.site);
+const canonicalURL = new URL('/landing/masajes', Astro.site);
 
 // Schema.org for massage service
 const schemaOrg = {
@@ -99,6 +99,6 @@ const schemaOrg = {
     </main>
     <LandingFooter />
     <LandingWhatsAppButton whatsappNumber={whatsappNumber} lang="es" />
-    <script src="../../../scripts/landing.js"></script>
+    <script src="../../scripts/landing.js"></script>
   </body>
 </html>

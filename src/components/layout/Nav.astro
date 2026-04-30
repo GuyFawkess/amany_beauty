@@ -18,25 +18,40 @@ const services = await getCollection('services');
 const currentPath = Astro.url.pathname;
 
 // Build language toggle URL
-const otherLang = lang === 'es' ? 'en' : 'es';
+// Spanish = root (no prefix), English = /en prefix
 const servicesSegment = lang === 'es' ? 'servicios' : 'services';
-const otherServicesSegment = otherLang === 'es' ? 'servicios' : 'services';
+
+// Helper: build a locale-aware path prefix
+// Spanish pages are at root (/...), English pages are prefixed (/en/...)
+const langPrefix = lang === 'en' ? '/en' : '';
 
 // If we're on a service page, use the provided slug for the other language
 let langTogglePath: string;
 if (currentServiceSlug) {
-  // We're on a service page - use the provided slug
-  langTogglePath = `/${otherLang}/${otherServicesSegment}/${currentServiceSlug}`;
+  // We're on a service page - build the other language URL
+  if (lang === 'es') {
+    // Switching ES -> EN: add /en prefix and use services segment
+    langTogglePath = `/en/services/${currentServiceSlug}`;
+  } else {
+    // Switching EN -> ES: go to root and use servicios segment
+    langTogglePath = `/servicios/${currentServiceSlug}`;
+  }
 } else {
-  // Not on a service page - use path replacement
-  langTogglePath = currentPath.replace(`/${lang}/`, `/${otherLang}/`).replace(`/${servicesSegment}/`, `/${otherServicesSegment}/`);
+  // Not on a service page - swap the locale prefix and service segment names
+  if (lang === 'es') {
+    // Switching ES -> EN: add /en prefix to current root path, swap segment names
+    langTogglePath = `/en${currentPath}`.replace('/servicios/', '/services/');
+  } else {
+    // Switching EN -> ES: remove /en prefix, swap segment names
+    langTogglePath = currentPath.replace('/en/', '/').replace('/services/', '/servicios/');
+  }
 }
 ---
 
 <nav class="nav" aria-label={t.a11y.mainNav}>
   <div class="nav__container">
     <!-- Logo -->
-    <a href={`/${lang}/`} class="nav__logo" transition:persist>
+    <a href={`${langPrefix}/`} class="nav__logo" transition:persist>
       <img src="/logo2.svg" alt="Amani Beauty" width="140" height="40" />
     </a>
 
@@ -45,7 +60,7 @@ if (currentServiceSlug) {
       <!-- Services Dropdown -->
       <div class="nav__dropdown">
         <a
-          href={`/${lang}/#services`}
+          href={`${langPrefix}/#services`}
           class="nav__link nav__dropdown-toggle"
         >
           {t.nav.services}
@@ -57,7 +72,7 @@ if (currentServiceSlug) {
           {services.sort((a, b) => a.data.sortOrder - b.data.sortOrder).map((service) => (
             <li role="none">
               <a
-                href={`/${lang}/${lang === 'es' ? 'servicios' : 'services'}/${lang === 'es' ? service.data.slug_es : service.data.slug_en}`}
+                href={`${langPrefix}/${servicesSegment}/${lang === 'es' ? service.data.slug_es : service.data.slug_en}`}
                 class="nav__dropdown-link"
                 role="menuitem"
               >
@@ -69,9 +84,9 @@ if (currentServiceSlug) {
       </div>
 
       <!-- Anchor Links (Home sections) -->
-      <a href={`/${lang}/#about`} class="nav__link">{t.nav.about}</a>
-      <a href={`/${lang}/#gallery`} class="nav__link">{t.nav.gallery}</a>
-      <a href={`/${lang}/#contact`} class="nav__link">{t.nav.contact}</a>
+      <a href={`${langPrefix}/#about`} class="nav__link">{t.nav.about}</a>
+      <a href={`${langPrefix}/#gallery`} class="nav__link">{t.nav.gallery}</a>
+      <a href={`${langPrefix}/#contact`} class="nav__link">{t.nav.contact}</a>
 
       <!-- Language Toggle -->
       <a href={langTogglePath} class="nav__lang-toggle" aria-label={t.a11y.languageToggle} transition:persist>
@@ -90,18 +105,18 @@ if (currentServiceSlug) {
   <!-- Mobile Menu -->
   <div class="nav__mobile-menu">
     <div class="nav__mobile-menu-content">
-      <a href={`/${lang}/#services`} class="nav__mobile-link">{t.nav.services}</a>
+      <a href={`${langPrefix}/#services`} class="nav__mobile-link">{t.nav.services}</a>
       {services.sort((a, b) => a.data.sortOrder - b.data.sortOrder).map((service) => (
         <a
-          href={`/${lang}/${lang === 'es' ? 'servicios' : 'services'}/${lang === 'es' ? service.data.slug_es : service.data.slug_en}`}
+          href={`${langPrefix}/${servicesSegment}/${lang === 'es' ? service.data.slug_es : service.data.slug_en}`}
           class="nav__mobile-link nav__mobile-link--sub"
         >
           {lang === 'es' ? service.data.title : service.data.title_en}
         </a>
       ))}
-      <a href={`/${lang}/#about`} class="nav__mobile-link">{t.nav.about}</a>
-      <a href={`/${lang}/#gallery`} class="nav__mobile-link">{t.nav.gallery}</a>
-      <a href={`/${lang}/#contact`} class="nav__mobile-link">{t.nav.contact}</a>
+      <a href={`${langPrefix}/#about`} class="nav__mobile-link">{t.nav.about}</a>
+      <a href={`${langPrefix}/#gallery`} class="nav__mobile-link">{t.nav.gallery}</a>
+      <a href={`${langPrefix}/#contact`} class="nav__mobile-link">{t.nav.contact}</a>
       <a href={langTogglePath} class="nav__mobile-link nav__mobile-link--lang">
         {lang === 'es' ? 'English' : 'Español'}
       </a>

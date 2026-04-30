@@ -16,7 +16,8 @@ interface Props {
 const { title, title_en, description, description_en, slug, slug_en, coverImage, index, lang } = Astro.props;
 
 const isReversed = index % 2 === 1;
-const servicePath = `/${lang}/${lang === 'es' ? 'servicios' : 'services'}/${lang === 'es' ? slug : slug_en}`;
+const langPrefix = lang === 'en' ? '/en' : '';
+const servicePath = `${langPrefix}/${lang === 'es' ? 'servicios' : 'services'}/${lang === 'es' ? slug : slug_en}`;
 ---
 
 <article class={`service-card ${isReversed ? 'service-card--reversed' : ''}`} transition:animate="fade">

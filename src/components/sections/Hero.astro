@@ -2,6 +2,7 @@
 import { getEntry } from 'astro:content';
 
 const lang = (Astro.params?.lang as 'es' | 'en') || 'es';
+const langPrefix = lang === 'en' ? '/en' : '';
 
 const generalData = await getEntry('site', 'general');
 if (!generalData) {
@@ -31,10 +32,10 @@ const { data } = generalData;
       </h1>
 
       <div class="hero__cta">
-        <a href={`/${lang}/#about`} class="hero__cta-button hero__cta-button--primary">
+        <a href={`${langPrefix}/#about`} class="hero__cta-button hero__cta-button--primary">
           {lang === 'es' ? 'Conócenos' : 'About Us'}
         </a>
-        <a href={`/${lang}/#contact`} class="hero__cta-button hero__cta-button--secondary">
+        <a href={`${langPrefix}/#contact`} class="hero__cta-button hero__cta-button--secondary">
           {lang === 'es' ? 'Reservar' : 'Book Now'}
         </a>
       </div>

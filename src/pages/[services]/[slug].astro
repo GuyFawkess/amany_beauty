@@ -1,28 +1,28 @@
 ---
-import Layout from '../../../components/layout/Layout.astro';
-import ImagePlaceholder from '../../../components/ui/ImagePlaceholder.astro';
-import TreatmentCard from '../../../components/ui/TreatmentCard.astro';
-import WhatsAppButton from '../../../components/ui/WhatsAppButton.astro';
+import Layout from '../../components/layout/Layout.astro';
+import ImagePlaceholder from '../../components/ui/ImagePlaceholder.astro';
+import TreatmentCard from '../../components/ui/TreatmentCard.astro';
+import WhatsAppButton from '../../components/ui/WhatsAppButton.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { useTranslations } from '../../../i18n';
-import { sanitizeWhatsAppNumber } from '../../../utils/sanitize';
+import { useTranslations } from '../../i18n';
+import { sanitizeWhatsAppNumber } from '../../utils/sanitize';
 
 export async function getStaticPaths() {
   const services = await getCollection('services');
 
-  // Generate paths for English routes only (using 'services' and English slug)
+  // Generate paths for Spanish routes (root URL, no lang prefix)
   return services.map((service) => ({
-    params: { lang: 'en', services: 'services', slug: service.data.slug_en },
-    props: { service, currentSlug: service.data.slug_en },
+    params: { services: 'servicios', slug: service.data.slug_es },
+    props: { service, currentSlug: service.data.slug_es },
   }));
 }
 
-const lang = 'en';
+const lang = 'es';
 const { service } = Astro.props;
 const t = useTranslations(lang);
 
-// Get the slug for the other language (Spanish)
-const otherLangSlug = service.data.slug_es;
+// Get the slug for the other language
+const otherLangSlug = service.data.slug_en;
 
 // Get site data
 const generalData = await getEntry('site', 'general');
@@ -34,12 +34,12 @@ const { data: siteData } = generalData;
 // Sanitize WhatsApp number for safe URL usage
 const sanitizedWhatsapp = sanitizeWhatsAppNumber(siteData.whatsapp);
 
-// Get the title and other data in English
-const title = service.data.title_en;
-const description = service.data.description_en;
+// Get the title and other data in Spanish
+const title = service.data.title;
+const description = service.data.description;
 
-// Get the body content in English
-const bodyContent = service.data.body_en;
+// Get the body content in Spanish
+const bodyContent = service.data.body_es;
 ---
 
 <Layout
@@ -75,7 +75,7 @@ const bodyContent = service.data.body_en;
   <section class="treatments">
     <div class="treatments__container">
       <h2 class="treatments__title">
-        Treatments
+        Tratamientos
       </h2>
 
       <div class="treatments__grid">
@@ -99,7 +99,7 @@ const bodyContent = service.data.body_en;
   <section class="service-cta">
     <div class="service-cta__container">
       <p class="service-cta__text">
-        Ready for your wellness experience?
+        ¿Lista para tu experiencia de bienestar?
       </p>
       <a
         href={sanitizedWhatsapp ? `https://wa.me/${sanitizedWhatsapp}` : '#'}

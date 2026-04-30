@@ -9,8 +9,7 @@ export const languages = {
 export type Lang = keyof typeof languages;
 
 export function getLangFromUrl(url: URL): Lang {
-  const [, lang] = url.pathname.split('/');
-  if (lang in languages) return lang as Lang;
+  if (url.pathname.startsWith('/en')) return 'en';
   return 'es';
 }
 

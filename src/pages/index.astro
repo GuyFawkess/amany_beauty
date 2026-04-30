@@ -1,4 +1,21 @@
 ---
-// Redirect root URL to Spanish locale
-return Astro.redirect('/es/');
+import Layout from '../components/layout/Layout.astro';
+import Hero from '../components/sections/Hero.astro';
+import ServicesSection from '../components/sections/ServicesSection.astro';
+import AboutSection from '../components/sections/AboutSection.astro';
+import GalleryGrid from '../components/sections/GalleryGrid.astro';
+import ContactSection from '../components/sections/ContactSection.astro';
+import WhatsAppButton from '../components/ui/WhatsAppButton.astro';
 ---
+
+<Layout
+  title="Inicio"
+  description="Amani Beauty by María García - Tu espacio de belleza y bienestar. Masajes, tratamientos de uñas y faciales personalizados."
+>
+  <Hero />
+  <ServicesSection />
+  <AboutSection />
+  <GalleryGrid />
+  <ContactSection />
+  <WhatsAppButton />
+</Layout>

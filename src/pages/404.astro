@@ -4,6 +4,7 @@ import { getLangFromUrl, useTranslations } from '../i18n';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const langPrefix = lang === 'en' ? '/en' : '';
 ---
 
 <Layout title={t.notFound.title}>
@@ -19,7 +20,7 @@ const t = useTranslations(lang);
         {t.notFound.message}
       </p>
 
-      <a href={`/${lang}/`} class="not-found__button">
+      <a href={`${langPrefix}/`} class="not-found__button">
         {t.notFound.backHome}
       </a>
     </div>
