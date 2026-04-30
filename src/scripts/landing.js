@@ -45,12 +45,9 @@
 
       log.info(`Found ${animatedElements.length} elements to animate`);
 
-      // Set up initial state for all animated elements
+      // Set initial hidden state via CSS class (batched, no inline styles)
       animatedElements.forEach(el => {
-        // Set initial hidden state
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+        el.classList.add('scroll-animate-hidden');
       });
 
       // Create intersection observer
@@ -71,15 +68,9 @@
     handleIntersect(entries) {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          // Animate in
           const element = entry.target;
-          element.style.opacity = '1';
-          element.style.transform = 'translateY(0)';
-
-          // Add is-animated class for potential CSS hooks
+          element.classList.remove('scroll-animate-hidden');
           element.classList.add('is-animated');
-
-          // Stop observing this element once animated
           this.observer.unobserve(element);
         }
       });
