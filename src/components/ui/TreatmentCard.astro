@@ -17,7 +17,7 @@ const { name, name_en, description, description_en, duration, price, image, lang
 const t = useTranslations(lang);
 ---
 
-<article class="treatment-card">
+<article class="treatment-card" data-animate="fade-up" data-duration="700">
   <div class="treatment-card__image">
     {image ? (
       <img src={image} alt={lang === 'es' ? name : name_en} />

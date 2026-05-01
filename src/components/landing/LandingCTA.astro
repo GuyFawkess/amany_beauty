@@ -14,7 +14,7 @@ const whatsappLink = whatsappNumber ? `https://wa.me/${whatsappNumber}` : '#';
 
 <section id="reservar" class="cta-section">
   <div class="container">
-    <div class="cta-content">
+    <div class="cta-content" data-animate="fade-up" data-duration="800">
       <h2 class="cta-title">{t.title}</h2>
 
       <p class="urgency-text">
@@ -26,6 +26,8 @@ const whatsappLink = whatsappNumber ? `https://wa.me/${whatsappNumber}` : '#';
         class="cta-button pulse-animation"
         target="_blank"
         rel="noopener noreferrer"
+        data-animate="zoom-in"
+        data-duration="700"
       >
         {t.button}
       </a>

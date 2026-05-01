@@ -28,8 +28,8 @@ const openItem: number | null = (() => {
 
 <section class="landing-faq" id="faq">
   <div class="landing-faq__container">
-    <h2 class="landing-faq__title">{t.title}</h2>
-    <p class="landing-faq__subtitle">
+    <h2 class="landing-faq__title" data-animate="fade-up" data-duration="600">{t.title}</h2>
+    <p class="landing-faq__subtitle" data-animate="fade-up" data-duration="700">
       {t.subtitle}
     </p>
 
@@ -39,6 +39,8 @@ const openItem: number | null = (() => {
           class={`landing-faq__item ${openItem === index ? 'landing-faq__item--open' : ''}`}
           id={`faq-${index}`}
           open={openItem === index}
+          data-animate="fade-up"
+          data-duration={String(600 + index * 100)}
         >
           <summary class="landing-faq__question">
             <span>{faq.question}</span>

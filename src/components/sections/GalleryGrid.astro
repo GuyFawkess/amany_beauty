@@ -15,11 +15,11 @@ const images = galleryData.data.images || [];
 
 <section class="gallery-section" id="gallery">
   <div class="gallery-section__container">
-    <h2 class="gallery-section__title">
+    <h2 class="gallery-section__title" data-animate="fade-up" data-duration="600">
       {t.gallery.title}
     </h2>
 
-    <p class="gallery-section__subtitle">
+    <p class="gallery-section__subtitle" data-animate="fade-up" data-duration="700">
       {t.gallery.subtitle}
     </p>
 
@@ -27,8 +27,9 @@ const images = galleryData.data.images || [];
       {/* Render gallery images from content collection */}
       {Array.from({ length: images.length }).map((_, index) => {
         const image = images[index];
+        const duration = 500 + (index % 4) * 150;
         return (
-          <div class="gallery-grid__item">
+          <div class="gallery-grid__item" data-animate="zoom-in" data-duration={duration}>
             <div class="gallery-grid__image-container">
               {image ? (
                 <img

@@ -18,9 +18,12 @@ const { title, title_en, description, description_en, slug, slug_en, coverImage,
 const isReversed = index % 2 === 1;
 const langPrefix = lang === 'en' ? '/en' : '';
 const servicePath = `${langPrefix}/${lang === 'es' ? 'servicios' : 'services'}/${lang === 'es' ? slug : slug_en}`;
+
+const animateDirection = isReversed ? 'fade-right' : 'fade-left';
+const duration = 600 + index * 150;
 ---
 
-<article class={`service-card ${isReversed ? 'service-card--reversed' : ''}`} transition:animate="fade">
+<article class={`service-card ${isReversed ? 'service-card--reversed' : ''}`} transition:animate="fade" data-animate={animateDirection} data-duration={duration}>
   <div class="service-card__image">
     {coverImage ? (
       <img src={coverImage} alt={lang === 'es' ? title : title_en} loading="lazy" decoding="async" transition:name={`service-cover-${slug}`} />

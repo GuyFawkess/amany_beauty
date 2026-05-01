@@ -25,7 +25,7 @@ const whatsappLink = whatsappNumber
   : '#';
 ---
 
-<article class={`treatment-card ${isFeatured ? 'treatment-card--featured' : ''}`}>
+<article class={`treatment-card ${isFeatured ? 'treatment-card--featured' : ''}`} data-animate="zoom-in" data-duration="600">
   {image && (
     <div class="treatment-card__image">
       <img src={image} alt={name} loading="lazy" />

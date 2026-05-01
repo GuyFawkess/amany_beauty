@@ -164,6 +164,38 @@ h3 {
 }
 
 /* ================================
+   SCROLL ANIMATION CLASSES
+   ================================ */
+
+/* Prevent FOUC - hide animated elements until JS initializes */
+[data-animate] {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+[data-animate="fade-up"] {
+  transform: translateY(2.5rem);
+}
+
+[data-animate="fade-left"] {
+  transform: translateX(-2.5rem);
+}
+
+[data-animate="fade-right"] {
+  transform: translateX(2.5rem);
+}
+
+[data-animate="zoom-in"] {
+  transform: scale(0.9);
+}
+
+/* JS-driven state classes */
+.scroll-anim-visible {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+}
+
+/* ================================
    UTILITY CLASSES
    ================================ */
 .container {

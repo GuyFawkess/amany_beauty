@@ -41,14 +41,16 @@ const treatments = [
 
 <section class="landing-offer" id="oferta">
   <div class="landing-offer__container">
-    <h2 class="landing-offer__title">{t.title}</h2>
-    <p class="landing-offer__subtitle">
+    <h2 class="landing-offer__title" data-animate="fade-up" data-duration="600">{t.title}</h2>
+    <p class="landing-offer__subtitle" data-animate="fade-up" data-duration="700">
       {t.subtitle}
     </p>
 
     <div class="landing-offer__cards">
-      {treatments.map(treatment => (
-        <LandingTreatmentCard treatment={treatment} lang={lang} />
+      {treatments.map((treatment, i) => (
+        <div data-animate="zoom-in" data-duration={String(700 + i * 150)}>
+          <LandingTreatmentCard treatment={treatment} lang={lang} />
+        </div>
       ))}
     </div>
   </div>

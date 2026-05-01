@@ -11,13 +11,13 @@ const t = languages[lang].landing.testimonials;
 
 <section class="landing-testimonials" id="testimonios">
   <div class="landing-testimonials__container">
-    <h2 class="landing-testimonials__title">{t.title}</h2>
-    <p class="landing-testimonials__subtitle">
+    <h2 class="landing-testimonials__title" data-animate="fade-up" data-duration="600">{t.title}</h2>
+    <p class="landing-testimonials__subtitle" data-animate="fade-up" data-duration="700">
       {t.subtitle}
     </p>
 
     <!-- Google Rating Summary -->
-    <div class="google-rating">
+    <div class="google-rating" data-animate="zoom-in" data-duration="800">
       <div class="google-rating__stars">
         {[...Array(5)].map((_, i) => (
           <svg class="google-rating__star" viewBox="0 0 24 24" fill={i < Math.round(Number(reviews.rating)) ? "#FBBC04" : "#E0E0E0"}>
@@ -43,8 +43,8 @@ const t = languages[lang].landing.testimonials;
 
     <!-- Google Review Cards -->
     <div class="google-cards">
-      {reviews.reviews.map(review => (
-        <article class="google-card">
+      {reviews.reviews.map((review, i) => (
+        <article class="google-card" data-animate="fade-up" data-duration={String(600 + (i % 6) * 100)}>
           <div class="google-card__header">
             <div class={`google-card__avatar google-card__avatar--${review.id % 5}`}>
               {review.name.charAt(0)}
@@ -81,6 +81,8 @@ const t = languages[lang].landing.testimonials;
       target="_blank"
       rel="noopener noreferrer"
       class="google-cta"
+      data-animate="fade-up"
+      data-duration="900"
     >
       <svg class="google-cta__icon" viewBox="0 0 24 24">
         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>

@@ -11,10 +11,10 @@ const t = languages[lang].landing.problem;
 
 <section class="landing-problem" id="problema">
   <div class="landing-problem__container">
-    <h2 class="landing-problem__title">{t.title}</h2>
+    <h2 class="landing-problem__title" data-animate="fade-up" data-duration="600">{t.title}</h2>
 
     <div class="landing-problem__list">
-      <div class="landing-problem__item" data-animate-delay="1">
+      <div class="landing-problem__item" data-animate-delay="1" data-animate="fade-left" data-duration="700">
         <div class="landing-problem__icon landing-problem__icon--spine">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="5" r="2"/>
@@ -26,7 +26,7 @@ const t = languages[lang].landing.problem;
         <span class="landing-problem__bullet">{t.bullet1}</span>
       </div>
 
-      <div class="landing-problem__item" data-animate-delay="2">
+      <div class="landing-problem__item" data-animate-delay="2" data-animate="fade-right" data-duration="800">
         <div class="landing-problem__icon landing-problem__icon--stress">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 2L2 7l10 5 10-5-10-5z"/>
@@ -37,7 +37,7 @@ const t = languages[lang].landing.problem;
         <span class="landing-problem__bullet">{t.bullet2}</span>
       </div>
 
-      <div class="landing-problem__item" data-animate-delay="3">
+      <div class="landing-problem__item" data-animate-delay="3" data-animate="fade-left" data-duration="750">
         <div class="landing-problem__icon landing-problem__icon--sleep">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
@@ -46,7 +46,7 @@ const t = languages[lang].landing.problem;
         <span class="landing-problem__bullet">{t.bullet3}</span>
       </div>
 
-      <div class="landing-problem__item" data-animate-delay="4">
+      <div class="landing-problem__item" data-animate-delay="4" data-animate="fade-right" data-duration="850">
         <div class="landing-problem__icon landing-problem__icon--battery">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="1" y="6" width="18" height="12" rx="2" ry="2"/>
@@ -60,11 +60,11 @@ const t = languages[lang].landing.problem;
       </div>
     </div>
 
-    <p class="landing-problem__agitation">
+    <p class="landing-problem__agitation" data-animate="fade-up" data-duration="700">
       {t.agitation}
     </p>
 
-    <p class="landing-problem__transition">
+    <p class="landing-problem__transition" data-animate="fade-up" data-duration="800">
       {t.transition}
     </p>
   </div>

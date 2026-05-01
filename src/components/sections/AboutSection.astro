@@ -15,16 +15,16 @@ const { data } = generalData;
 
 <section class="about-section" id="about">
   <div class="about-section__container">
-    <h2 class="about-section__title">
+    <h2 class="about-section__title" data-animate="fade-up" data-duration="600">
       {t.about.title}
     </h2>
 
     <div class="about-section__content">
-      <div class="about-section__image">
+      <div class="about-section__image" data-animate="fade-left" data-duration="700">
         <ImagePlaceholder aspectRatio="3/4" alt="María García" />
       </div>
 
-      <div class="about-section__text">
+      <div class="about-section__text" data-animate="fade-right" data-duration="800">
         <p>{lang === 'es' ? data.about : data.about_en}</p>
       </div>
     </div>
