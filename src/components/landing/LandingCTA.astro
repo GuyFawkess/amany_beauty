@@ -28,6 +28,9 @@ const whatsappLink = whatsappNumber ? `https://wa.me/${whatsappNumber}` : '#';
         rel="noopener noreferrer"
         data-animate="zoom-in"
         data-duration="700"
+        data-gtm-event="whatsapp_click"
+        data-gtm-location="landing_cta"
+        data-gtm-label={`landing_cta_${lang}`}
       >
         {t.button}
       </a>

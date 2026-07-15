@@ -39,7 +39,15 @@ const whatsappLink = whatsappNumber
         <li class="treatment-card__benefit">{benefit}</li>
       ))}
     </ul>
-    <a href={whatsappLink} class="treatment-card__cta" target="_blank" rel="noopener noreferrer">
+    <a
+      href={whatsappLink}
+      class="treatment-card__cta"
+      target="_blank"
+      rel="noopener noreferrer"
+      data-gtm-event="whatsapp_click"
+      data-gtm-location="landing_treatment_card"
+      data-gtm-label={`treatment_${name.toLowerCase().replace(/\s+/g, '_')}_${lang}`}
+    >
       {t.bookCta}
     </a>
   </div>
