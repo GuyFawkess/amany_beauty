@@ -7,6 +7,8 @@ import GalleryGrid from '../../components/sections/GalleryGrid.astro';
 import ContactSection from '../../components/sections/ContactSection.astro';
 import WhatsAppButton from '../../components/ui/WhatsAppButton.astro';
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   return [
     { params: { lang: 'en' } },

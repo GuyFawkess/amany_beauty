@@ -5,6 +5,7 @@ import Nav from './Nav.astro';
 import Footer from './Footer.astro';
 import GoogleTagManager from './GoogleTagManager.astro';
 import GoogleTagManagerBody from './GoogleTagManagerBody.astro';
+import MetaPixel from './MetaPixel.astro';
 import { getLangFromUrl } from '../../i18n';
 import { getEntry } from 'astro:content';
 
@@ -20,6 +21,7 @@ const { title, description = 'Amani Beauty by María García - Tu espacio de bel
 const lang = getLangFromUrl(Astro.url);
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const gtmId = import.meta.env.GTM_ID;
+const metaPixelId = import.meta.env.META_PIXEL_ID;
 
 // Get site data for Schema.org
 const generalData = await getEntry('site', 'general');
@@ -96,6 +98,9 @@ const schemaOrg = {
 
     <!-- Google Tag Manager -->
     {gtmId && <GoogleTagManager id={gtmId} />}
+
+    <!-- Meta Pixel -->
+    {metaPixelId && <MetaPixel pixelId={metaPixelId} />}
       </head>
   <body>
     {gtmId && <GoogleTagManagerBody id={gtmId} />}
@@ -112,13 +117,38 @@ const schemaOrg = {
         var el = e.target.closest('[data-gtm-event]');
         if (!el) return;
 
+        var eventName = el.dataset.gtmEvent;
+        var location = el.dataset.gtmLocation || '';
+        var label = el.dataset.gtmLabel || '';
+        var url = el.href || '';
+
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
-          event: el.dataset.gtmEvent,
-          gtm_location: el.dataset.gtmLocation || '',
-          gtm_label: el.dataset.gtmLabel || '',
-          url: el.href || '',
+          event: eventName,
+          gtm_location: location,
+          gtm_label: label,
+          url: url,
         });
+
+        // Mirror to Meta Pixel with a matching event_id so CAPI dedupes.
+        if (typeof window.fbq === 'function') {
+          var eventId = Date.now() + '-' + Math.random().toString(36).slice(2, 10);
+          var metaEvent = eventName === 'whatsapp_click' ? 'Contact'
+            : eventName === 'instagram_click' ? 'Lead'
+            : 'CustomEvent';
+          window.fbq('track', metaEvent, { content_name: eventName, content_category: location, content_label: label }, { eventID: eventId });
+          fetch('/api/meta-conversions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              event_name: metaEvent,
+              event_id: eventId,
+              event_source_url: window.location.href,
+              custom_data: { content_name: eventName, content_category: location, content_label: label },
+            }),
+            keepalive: true,
+          }).catch(function () {});
+        }
       });
     </script>
   </body>

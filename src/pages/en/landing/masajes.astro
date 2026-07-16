@@ -14,6 +14,8 @@ import LandingClose from '../../../components/landing/LandingClose.astro';
 import LandingFooter from '../../../components/landing/LandingFooter.astro';
 import LandingWhatsAppButton from '../../../components/landing/LandingWhatsAppButton.astro';
 
+export const prerender = true;
+
 // Get site data for WhatsApp number
 const generalData = await getEntry('site', 'general');
 const whatsappNumber = sanitizeWhatsAppNumber(generalData?.data?.whatsapp);
